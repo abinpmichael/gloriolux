@@ -31,8 +31,8 @@ ErrorDocument 404 /404.php
     RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
 
     # 2. Redirect index.php to root (/)
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /+(.*)index\.php [NC]
-    RewriteRule ^ %1 [L,R=301]
+    RewriteCond %{THE_REQUEST} ^.*/index\.php
+    RewriteRule ^(.*)index\.php$ /$1 [R=301,L]
 
     # 3. Remove .php extension (e.g. /about.php becomes /about)
     RewriteCond %{REQUEST_FILENAME} !-d
