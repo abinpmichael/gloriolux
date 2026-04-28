@@ -2,7 +2,7 @@
 session_start();
 // Verify admin role
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { 
-    header("Location: /Gloriolux/login.php"); 
+    header("Location: " . BASE_URL . "login.php"); 
     exit; 
 }
 
@@ -55,7 +55,7 @@ $admin_email = $settings_data['admin_email'] ?? 'admin@gloriolux.com';
     <title>Settings | Gloriolux Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <style>
         .admin-layout { display: flex; min-height: 100vh; }
         .admin-sidebar { width: 250px; background-color: var(--primary-color); color: #fff; padding: 2rem 1rem; display: flex; flex-direction: column; }

@@ -41,19 +41,19 @@ $total = 0;
                             ?>
                             <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
                                 <td style="padding: 1rem 0; display: flex; align-items: center; gap: 1rem;">
-                                    <img src="/Gloriolux/<?php echo htmlspecialchars($item['image_url']); ?>" alt="Product" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($item['image_url']); ?>" alt="Product" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                                     <span style="font-weight: 600;"><?php echo htmlspecialchars($item['name']); ?></span>
                                 </td>
                                 <td style="padding: 1rem 0;">$<?php echo number_format($item['price'], 2); ?></td>
                                 <td style="padding: 1rem 0;">
-                                    <form action="/Gloriolux/cart_update.php" method="POST" style="display:flex; align-items:center; gap:5px;">
+                                    <form action="<?= BASE_URL ?>cart_update.php" method="POST" style="display:flex; align-items:center; gap:5px;">
                                         <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">
                                         <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock'] > 0 ? $item['stock'] : 10; ?>" style="width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 0.3rem;" onchange="this.form.submit()">
                                     </form>
                                 </td>
                                 <td style="padding: 1rem 0; font-weight: bold;">$<?php echo number_format($item_total, 2); ?></td>
                                 <td style="padding: 1rem 0; text-align: right;">
-                                    <a href="/Gloriolux/cart_remove.php?id=<?php echo $item['cart_id']; ?>" style="color: red;"><i class="fas fa-trash"></i></a>
+                                    <a href="<?= BASE_URL ?>cart_remove.php?id=<?php echo $item['cart_id']; ?>" style="color: red;"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -103,7 +103,7 @@ $total = 0;
                         <span>$<?php echo number_format($grand_total, 2); ?></span>
                     </div>
 
-                    <a href="/Gloriolux/checkout.php" class="btn btn-primary" style="width: 100%; text-align: center; display: block;">Proceed to Checkout</a>
+                    <a href="<?= BASE_URL ?>checkout.php" class="btn btn-primary" style="width: 100%; text-align: center; display: block;">Proceed to Checkout</a>
                 </div>
             </div>
         </div>
@@ -112,7 +112,7 @@ $total = 0;
             <i class="fas fa-shopping-bag" style="font-size: 4rem; color: var(--glass-border); margin-bottom: 1.5rem;"></i>
             <h2>Your cart is empty</h2>
             <p style="color: var(--text-light); margin-bottom: 2rem;">Looks like you haven't added anything to your cart yet.</p>
-            <a href="/Gloriolux/shop.php" class="btn btn-primary">Start Shopping</a>
+            <a href="<?= BASE_URL ?>shop.php" class="btn btn-primary">Start Shopping</a>
         </div>
     <?php endif; ?>
 </div>

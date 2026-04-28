@@ -2,7 +2,7 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <div class="admin-sidebar">
-    <div class="admin-logo"><a href="/Gloriolux/admin/index.php"><img src="/Gloriolux/assets/img/logo.png" alt="Gloriolux Admin" style="height: 50px; filter: brightness(0) invert(1);"></a></div>
+    <div class="admin-logo"><a href="<?= BASE_URL ?>admin/index.php"><img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux Admin" style="height: 50px; filter: brightness(0) invert(1);"></a></div>
     <a href="index.php" class="<?= $current_page == 'index.php' ? 'active' : '' ?>"><i class="fas fa-home"></i> Dashboard</a>
     <a href="orders.php" class="<?= $current_page == 'orders.php' ? 'active' : '' ?>"><i class="fas fa-shopping-cart"></i> Orders</a>
     <a href="products.php" class="<?= $current_page == 'products.php' ? 'active' : '' ?>"><i class="fas fa-box"></i> Products</a>
@@ -18,7 +18,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <a href="contact.php" class="<?= $current_page == 'contact.php' ? 'active' : '' ?>"><i class="fas fa-life-ring"></i> Contact Messages</a>
     <a href="settings.php" class="<?= $current_page == 'settings.php' ? 'active' : '' ?>"><i class="fas fa-cog"></i> Settings</a>
     <div style="margin-top:auto;">
-        <a href="/Gloriolux/index.php"><i class="fas fa-arrow-left"></i> Back to Site</a>
-        <a href="/Gloriolux/logout.php" style="color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="<?= BASE_URL ?>index.php"><i class="fas fa-arrow-left"></i> Back to Site</a>
+        <a href="<?= BASE_URL ?>logout.php" style="color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 </div>

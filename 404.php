@@ -10,8 +10,8 @@ require_once 'includes/header.php';
         <h2 style="font-family: var(--font-heading); font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem;">Page Not Found</h2>
         <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto;">We apologize, but the page you are looking for has been moved, deleted, or does not exist.</p>
         <div style="display: flex; gap: 1rem; justify-content: center;">
-            <a href="/Gloriolux/index.php" class="btn btn-primary" style="padding: 1rem 2.5rem;"><i class="fas fa-home" style="margin-right: 8px;"></i> Return Home</a>
-            <a href="/Gloriolux/shop.php" class="btn btn-outline" style="padding: 1rem 2.5rem; color: var(--primary-color); border-color: var(--primary-color);"><i class="fas fa-shopping-bag" style="margin-right: 8px;"></i> View Collection</a>
+            <a href="<?= BASE_URL ?>index.php" class="btn btn-primary" style="padding: 1rem 2.5rem;"><i class="fas fa-home" style="margin-right: 8px;"></i> Return Home</a>
+            <a href="<?= BASE_URL ?>shop.php" class="btn btn-outline" style="padding: 1rem 2.5rem; color: var(--primary-color); border-color: var(--primary-color);"><i class="fas fa-shopping-bag" style="margin-right: 8px;"></i> View Collection</a>
         </div>
     </div>
 </main>

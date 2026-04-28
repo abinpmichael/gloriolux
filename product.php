@@ -7,13 +7,13 @@ $stmt->execute([$id]);
 $product = $stmt->fetch();
 
 if (!$product) {
-    header("Location: /Gloriolux/shop.php?error=not_found");
+    header("Location: " . BASE_URL . "shop.php?error=not_found");
     exit;
 }
 
 // Check if hidden
 if ($product['is_hidden'] == 1 && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
-    header("Location: /Gloriolux/shop.php?error=product_unavailable");
+    header("Location: " . BASE_URL . "shop.php?error=product_unavailable");
     exit;
 }
 
@@ -35,7 +35,7 @@ require_once 'includes/header.php';
             <!-- Product Image Gallery (Left Side) -->
             <div style="flex: 1; min-width: 300px; background: #f8f9fa; border-radius: 16px; padding: 2rem; display: flex; justify-content: center; align-items: center;">
                 <?php if($product['image_url']): ?>
-                    <img src="/Gloriolux/<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; max-width: 500px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; max-width: 500px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                 <?php else: ?>
                     <div style="width: 100%; height: 400px; background: #ddd; border-radius: 8px;"></div>
                 <?php endif; ?>
@@ -49,7 +49,7 @@ require_once 'includes/header.php';
                 <h1 style="font-family: var(--font-heading); font-size: 3rem; margin-bottom: 1rem; color: var(--primary-color);">
                     <?= htmlspecialchars($product['name']) ?>
                     <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                        <a href="/Gloriolux/admin/products.php" class="btn btn-outline" style="font-size: 0.9rem; padding: 0.4rem 0.8rem; vertical-align: middle; margin-left: 1rem; border-color: var(--secondary-color); color: var(--secondary-color);"><i class="fas fa-edit"></i> Edit in CMS</a>
+                        <a href="<?= BASE_URL ?>admin/products.php" class="btn btn-outline" style="font-size: 0.9rem; padding: 0.4rem 0.8rem; vertical-align: middle; margin-left: 1rem; border-color: var(--secondary-color); color: var(--secondary-color);"><i class="fas fa-edit"></i> Edit in CMS</a>
                     <?php endif; ?>
                 </h1>
                 <p style="font-size: 1.5rem; color: var(--text-color); margin-bottom: 1.5rem; font-weight: 300;">
@@ -60,7 +60,7 @@ require_once 'includes/header.php';
                     <?= nl2br(htmlspecialchars($product['description'])) ?>
                 </div>
 
-                <form action="/Gloriolux/cart_add.php" method="POST" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
+                <form action="<?= BASE_URL ?>cart_add.php" method="POST" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     
                     <div style="display: flex; border: 1px solid #ddd; border-radius: 30px; overflow: hidden; background: #fff;">
@@ -93,7 +93,7 @@ require_once 'includes/header.php';
                         ?>
                         <a href="https://www.facebook.com/sharer/sharer.php?u=<?= $current_url ?>" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; background: #f8f9fa; color: #3b5998; text-decoration: none; transition: all 0.3s; border: 1px solid #ddd;"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://twitter.com/intent/tweet?url=<?= $current_url ?>&text=<?= $share_title ?>" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; background: #f8f9fa; color: #1da1f2; text-decoration: none; transition: all 0.3s; border: 1px solid #ddd;"><i class="fab fa-twitter"></i></a>
-                        <a href="https://pinterest.com/pin/create/button/?url=<?= $current_url ?>&description=<?= $share_title ?>&media=<?= urlencode((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/Gloriolux/" . $product['image_url']) ?>" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; background: #f8f9fa; color: #bd081c; text-decoration: none; transition: all 0.3s; border: 1px solid #ddd;"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="https://pinterest.com/pin/create/button/?url=<?= $current_url ?>&description=<?= $share_title ?>&media=<?= urlencode(BASE_URL_FULL . $product['image_url']) ?>" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; background: #f8f9fa; color: #bd081c; text-decoration: none; transition: all 0.3s; border: 1px solid #ddd;"><i class="fab fa-pinterest-p"></i></a>
                         <a href="https://instagram.com" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; background: #f8f9fa; color: #c13584; text-decoration: none; transition: all 0.3s; border: 1px solid #ddd;"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
@@ -131,7 +131,7 @@ require_once 'includes/header.php';
                 <?php if(isset($_GET['review']) && $_GET['review'] == 'success'): ?>
                     <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; text-align: center;">Thank you for your review!</div>
                 <?php endif; ?>
-                <form action="/Gloriolux/submit_review.php" method="POST" style="background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <form action="<?= BASE_URL ?>submit_review.php" method="POST" style="background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     <div style="margin-bottom: 1.5rem;">
                         <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Rating</label>
@@ -152,7 +152,7 @@ require_once 'includes/header.php';
             <?php else: ?>
                 <div style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px;">
                     <p style="margin-bottom: 1rem; color: #666;">You must be logged in to leave a review.</p>
-                    <a href="/Gloriolux/login.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Login to Review</a>
+                    <a href="<?= BASE_URL ?>login.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Login to Review</a>
                 </div>
             <?php endif; ?>
         </div>

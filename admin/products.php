@@ -2,7 +2,7 @@
 session_start();
 // Verify admin role
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { 
-    header("Location: /Gloriolux/login.php"); 
+    header("Location: " . BASE_URL . "login.php"); 
     exit; 
 }
 require_once '../includes/db.php';
@@ -93,7 +93,7 @@ $categories = $cat_stmt->fetchAll();
     <title>Manage Products | Gloriolux Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <style>
         .admin-layout { display: flex; min-height: 100vh; }
         .admin-sidebar { width: 250px; background-color: var(--primary-color); color: #fff; padding: 2rem 1rem; }
@@ -133,7 +133,7 @@ $categories = $cat_stmt->fetchAll();
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
             <?php foreach($products as $product): ?>
             <div style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; <?= (isset($product['is_hidden']) && $product['is_hidden'] == 1) ? 'opacity: 0.6;' : '' ?>">
-                <img src="/Gloriolux/<?php echo htmlspecialchars($product['image_url']); ?>" alt="" style="width: 100%; height: 200px; object-fit: cover;">
+                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_url']); ?>" alt="" style="width: 100%; height: 200px; object-fit: cover;">
                 <div style="padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;">
                     <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--primary-color);"><?php echo htmlspecialchars($product['name']); ?> <?= (isset($product['is_hidden']) && $product['is_hidden'] == 1) ? '<span style="color:red; font-size:0.8rem;">(Hidden)</span>' : '' ?></h3>
                     <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fas fa-tag"></i> <?php echo htmlspecialchars($product['category_name']); ?></p>

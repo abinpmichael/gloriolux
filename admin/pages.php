@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: /Gloriolux/login.php'); exit; }
+if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: ' . BASE_URL . 'login.php'); exit; }
 require_once '../includes/db.php';
 
 // Handle Add/Edit
@@ -21,7 +21,7 @@ $pages = $stmt->fetchAll();
     <meta charset="UTF-8">
     <title>Pages CMS | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <!-- Include basic WYSIWYG or let them use HTML for now -->
     <style>
         .admin-layout {display:flex; min-height:100vh;}

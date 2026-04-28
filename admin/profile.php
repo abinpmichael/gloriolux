@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: /Gloriolux/login.php'); exit; }
+if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: ' . BASE_URL . 'login.php'); exit; }
 require_once '../includes/db.php';
 
 $user_id = $_SESSION['user_id'];
@@ -38,7 +38,7 @@ $admin = $stmt->fetch();
     <meta charset="UTF-8">
     <title>Admin Profile | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <style>
         .admin-layout {display:flex; min-height:100vh;}
         .admin-sidebar {width:250px; background:var(--primary-color); color:#fff; padding:2rem 1rem; display:flex; flex-direction:column;}

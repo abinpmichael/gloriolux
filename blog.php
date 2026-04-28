@@ -10,10 +10,10 @@ $blogs = $stmt->fetchAll();
         <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2.5rem;">
             <?php foreach($blogs as $blog): ?>
                 <div class="product-card" style="display: flex; flex-direction: column;">
-                    <a href="/Gloriolux/blog_post.php?slug=<?= htmlspecialchars($blog['slug']) ?>" style="display: block; flex: 1;">
+                    <a href="<?= BASE_URL ?>blog_post.php?slug=<?= htmlspecialchars($blog['slug']) ?>" style="display: block; flex: 1;">
                         <div style="height: 250px; overflow: hidden; position: relative;">
                             <?php if($blog['image_url']): ?>
-                                <img src="/Gloriolux/<?= htmlspecialchars($blog['image_url']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                                <img src="<?= BASE_URL ?><?= htmlspecialchars($blog['image_url']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
                             <?php else: ?>
                                 <div style="width: 100%; height: 100%; background: var(--primary-color);"></div>
                             <?php endif; ?>

@@ -16,8 +16,8 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) FROM slides");
     if ($stmt->fetchColumn() == 0) {
         $pdo->exec("INSERT INTO slides (image_url, title, subtitle, button_text, button_url, display_order) VALUES 
-        ('assets/img/hero.png', 'Illuminate Your Senses.', 'Hand-poured luxury soy candles crafted with exquisite fragrances to transform your space into a sanctuary of elegance.', 'Shop Collection', '/Gloriolux/shop.php', 1),
-        ('assets/img/gifting.png', 'The Art of Gifting', 'Discover our curated selection of luxury gifting sets for any occasion.', 'Explore Gifts', '/Gloriolux/shop.php?category=2', 2)");
+        ('assets/img/hero.png', 'Illuminate Your Senses.', 'Hand-poured luxury soy candles crafted with exquisite fragrances to transform your space into a sanctuary of elegance.', 'Shop Collection', '/shop.php', 1),
+        ('assets/img/gifting.png', 'The Art of Gifting', 'Discover our curated selection of luxury gifting sets for any occasion.', 'Explore Gifts', '/shop.php?category=2', 2)");
     }
 
     // 2. Create SEO metadata table

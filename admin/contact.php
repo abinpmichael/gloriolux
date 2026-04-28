@@ -2,7 +2,7 @@
 session_start();
 // Verify admin role
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: /Gloriolux/login.php');
+    header('Location: ' . BASE_URL . 'login.php');
     exit;
 }
 require_once '../includes/db.php';
@@ -27,7 +27,7 @@ $contacts = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Messages | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <style>
         .admin-layout {display:flex; min-height:100vh;}
         .admin-sidebar {width:250px; background:var(--primary-color); color:#fff; padding:2rem 1rem; display:flex; flex-direction:column;}

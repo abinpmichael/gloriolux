@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
 }
 
 // Redirect back to the page the user came from, or index.php
-$referer = $_SERVER['HTTP_REFERER'] ?? '/Gloriolux/index.php';
+$referer = $_SERVER['HTTP_REFERER'] ?? BASE_URL . 'index.php';
 header("Location: $referer");
 exit;
 ?>

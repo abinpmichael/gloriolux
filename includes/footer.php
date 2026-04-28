@@ -3,7 +3,7 @@
     <footer class="footer">
         <div class="container footer-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
             <div class="footer-section brand-section">
-                <a href="/Gloriolux/index.php" class="logo"><img src="/Gloriolux/assets/img/logo.png" alt="Gloriolux" style="height: 50px;"></a>
+                <a href="<?= BASE_URL ?>index.php" class="logo"><img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux" style="height: 50px;"></a>
                 <p>Elevating everyday moments with artisanal, hand-poured luxury soy candles and premium gifting essentials.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-instagram"></i></a>
@@ -14,17 +14,17 @@
             <div class="footer-section links-section">
                 <h3>Shop</h3>
                 <ul>
-                    <li><a href="/Gloriolux/shop.php?category=candles">Candles</a></li>
-                    <li><a href="/Gloriolux/shop.php?category=gifting">Gifting Sets</a></li>
-                    <li><a href="/Gloriolux/shop.php?category=accessories">Accessories</a></li>
+                    <li><a href="<?= BASE_URL ?>shop.php?category=candles">Candles</a></li>
+                    <li><a href="<?= BASE_URL ?>shop.php?category=gifting">Gifting Sets</a></li>
+                    <li><a href="<?= BASE_URL ?>shop.php?category=accessories">Accessories</a></li>
                 </ul>
             </div>
             <div class="footer-section links-section">
                 <h3>Support</h3>
                 <ul>
-                    <li><a href="/Gloriolux/contact.php">Contact Us</a></li>
-                    <li><a href="/Gloriolux/faq.php">FAQ</a></li>
-                    <li><a href="/Gloriolux/shipping.php">Shipping & Returns</a></li>
+                    <li><a href="<?= BASE_URL ?>contact.php">Contact Us</a></li>
+                    <li><a href="<?= BASE_URL ?>faq.php">FAQ</a></li>
+                    <li><a href="<?= BASE_URL ?>shipping.php">Shipping & Returns</a></li>
                 </ul>
             </div>
             <div class="footer-section newsletter-section">
@@ -44,7 +44,7 @@
                     unset($_SESSION['subscribe_status']);
                 endif; 
                 ?>
-                <form action="/Gloriolux/subscribe.php" method="POST" class="newsletter-form">
+                <form action="<?= BASE_URL ?>subscribe.php" method="POST" class="newsletter-form">
                     <input type="email" name="email" placeholder="Your Email Address" required>
                     <button type="submit"><i class="fas fa-arrow-right"></i></button>
                 </form>
@@ -55,6 +55,6 @@
         </div>
     </footer>
 
-    <script src="/Gloriolux/assets/js/main.js?v=<?php echo time(); ?>"></script>
+    <script src="<?= BASE_URL ?>assets/js/main.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

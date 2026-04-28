@@ -2,7 +2,7 @@
 session_start();
 // Verify admin role
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { 
-    header("Location: /Gloriolux/login.php"); 
+    header("Location: " . BASE_URL . "login.php"); 
     exit; 
 }
 
@@ -16,7 +16,7 @@ require_once '../includes/db.php';
     <title>Gloriolux Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <style>
         .admin-layout {
             display: flex;
@@ -153,7 +153,7 @@ require_once '../includes/db.php';
                                 </span>
                             </td>
                             <td style="padding: 1rem 0.5rem; text-align: right;">
-                                <a href="/Gloriolux/admin/orders.php" class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; color: var(--secondary-color); border-color: var(--secondary-color);">Manage</a>
+                                <a href="<?= BASE_URL ?>admin/orders.php" class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; color: var(--secondary-color); border-color: var(--secondary-color);">Manage</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

@@ -9,6 +9,12 @@ $dbname = 'gloriolux_db';
 $user = 'root'; // Default XAMPP user
 $pass = ''; // Default XAMPP password
 
+// Determine the correct base URL depending on environment
+$isLocalhost = ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1');
+define('BASE_URL', $isLocalhost ? '/Gloriolux/' : '/');
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+define('BASE_URL_FULL', $protocol . '://' . $_SERVER['HTTP_HOST'] . BASE_URL);
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

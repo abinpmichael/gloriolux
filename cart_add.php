@@ -40,10 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
-    header("Location: /Gloriolux/cart.php");
+    header("Location: " . BASE_URL . "cart.php");
     exit;
 } else {
-    header("Location: /Gloriolux/index.php");
+    header("Location: " . BASE_URL . "index.php");
     exit;
 }
 ?>

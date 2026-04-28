@@ -16,6 +16,6 @@ if ($id > 0) {
     }
 }
 
-header("Location: /Gloriolux/cart.php");
+header("Location: " . BASE_URL . "cart.php");
 exit;
 ?>

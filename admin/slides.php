@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: /Gloriolux/login.php'); exit; }
+if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: ' . BASE_URL . 'login.php'); exit; }
 require_once '../includes/db.php';
 
 // Handle Add/Edit
@@ -33,7 +33,7 @@ $slides = $stmt->fetchAll();
     <meta charset="UTF-8">
     <title>Home Slider CMS | Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
     <style>
         .admin-layout {display:flex; min-height:100vh;}
         .admin-sidebar {width:250px; background:var(--primary-color); color:#fff; padding:2rem 1rem; display:flex; flex-direction:column;}
@@ -77,7 +77,7 @@ $slides = $stmt->fetchAll();
                 <?php foreach($slides as $s): ?>
                 <tr>
                     <td><?= $s['display_order'] ?></td>
-                    <td><img src="/Gloriolux/<?= htmlspecialchars($s['image_url']) ?>" style="width: 100px; height: 50px; object-fit: cover; border-radius: 5px;"></td>
+                    <td><img src="<?= BASE_URL ?><?= htmlspecialchars($s['image_url']) ?>" style="width: 100px; height: 50px; object-fit: cover; border-radius: 5px;"></td>
                     <td style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></td>
                     <td><?= htmlspecialchars($s['button_text']) ?></td>
                     <td>

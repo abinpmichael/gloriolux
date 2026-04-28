@@ -28,7 +28,7 @@ $faqs = $stmt->fetchAll();
         
         <div style="text-align: center; margin-top: 4rem;">
             <p style="margin-bottom: 1rem;">Still have questions?</p>
-            <a href="/Gloriolux/contact.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Contact Support</a>
+            <a href="<?= BASE_URL ?>contact.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Contact Support</a>
         </div>
     </div>
 </main>

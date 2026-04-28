@@ -29,6 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cart_id'], $_POST['qu
     }
 }
 
-header("Location: /Gloriolux/cart.php");
+header("Location: " . BASE_URL . "cart.php");
 exit;
 ?>

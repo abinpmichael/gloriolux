@@ -27,30 +27,30 @@ require_once __DIR__.'/db.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="/Gloriolux/index.php" class="logo"><img src="/Gloriolux/assets/img/logo.png" alt="Gloriolux" style="height: 50px;"></a>
+            <a href="<?= BASE_URL ?>index.php" class="logo"><img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux" style="height: 50px;"></a>
             <ul class="nav-links">
-                <li><a href="/Gloriolux/index.php">Home</a></li>
-                <li><a href="/Gloriolux/shop.php">Shop</a></li>
-                <li><a href="/Gloriolux/blog.php">Blog</a></li>
-                <li><a href="/Gloriolux/about.php">Our Story</a></li>
-                <li><a href="/Gloriolux/contact.php">Support</a></li>
+                <li><a href="<?= BASE_URL ?>index.php">Home</a></li>
+                <li><a href="<?= BASE_URL ?>shop.php">Shop</a></li>
+                <li><a href="<?= BASE_URL ?>blog.php">Blog</a></li>
+                <li><a href="<?= BASE_URL ?>about.php">Our Story</a></li>
+                <li><a href="<?= BASE_URL ?>contact.php">Support</a></li>
             </ul>
             <div class="nav-icons">
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="/Gloriolux/profile.php" title="Profile"><i class="fas fa-user"></i></a>
+                    <a href="<?= BASE_URL ?>profile.php" title="Profile"><i class="fas fa-user"></i></a>
                     <?php if($_SESSION['role'] === 'admin'): ?>
-                        <a href="/Gloriolux/admin/index.php" title="Admin Dashboard"><i class="fas fa-cog"></i></a>
+                        <a href="<?= BASE_URL ?>admin/index.php" title="Admin Dashboard"><i class="fas fa-cog"></i></a>
                     <?php endif; ?>
-                    <a href="/Gloriolux/logout.php" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                    <a href="<?= BASE_URL ?>logout.php" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
                 <?php else: ?>
-                    <a href="/Gloriolux/login.php" title="Login"><i class="fas fa-user"></i></a>
+                    <a href="<?= BASE_URL ?>login.php" title="Login"><i class="fas fa-user"></i></a>
                 <?php endif; ?>
-                <a href="/Gloriolux/cart.php" class="cart-icon" title="Cart">
+                <a href="<?= BASE_URL ?>cart.php" class="cart-icon" title="Cart">
                     <i class="fas fa-shopping-bag"></i>
                     <span class="cart-count">
                         <?php 

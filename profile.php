@@ -53,7 +53,7 @@ $orders = $ord_stmt->fetchAll();
                     
                     <div style="display: flex; gap: 1rem;">
                         <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                            <a href="/Gloriolux/admin/index.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color); padding: 0.5rem 1.5rem;">Admin Panel</a>
+                            <a href="<?= BASE_URL ?>admin/index.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color); padding: 0.5rem 1.5rem;">Admin Panel</a>
                         <?php endif; ?>
                         <a href="logout.php" class="btn" style="background: #ff6b6b; color: #fff; padding: 0.5rem 1.5rem;">Logout</a>
                     </div>

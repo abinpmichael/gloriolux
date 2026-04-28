@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
         $stmt = $pdo->prepare("INSERT INTO reviews (product_id, user_id, rating, comment) VALUES (?, ?, ?, ?)");
         $stmt->execute([$product_id, $user_id, $rating, $comment]);
         
-        header("Location: /Gloriolux/product.php?id=" . $product_id . "&review=success");
+        header("Location: " . BASE_URL . "product.php?id=" . $product_id . "&review=success");
         exit;
     }
 }
 
-header("Location: /Gloriolux/shop.php");
+header("Location: " . BASE_URL . "shop.php");
 exit;
 ?>

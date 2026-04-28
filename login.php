@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
         $_SESSION['role'] = $user['role'];
         
         if ($user['role'] === 'admin') {
-            header('Location: /Gloriolux/admin/index.php');
+            header('Location: ' . BASE_URL . 'admin/index.php');
         } else {
-            header('Location: /Gloriolux/index.php');
+            header('Location: ' . BASE_URL . 'index.php');
         }
         exit;
     } else {

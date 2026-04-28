@@ -22,7 +22,7 @@ if ($user_id) {
 $cart_items = $stmt->fetchAll();
 
 if (count($cart_items) === 0) {
-    header("Location: /Gloriolux/cart.php");
+    header("Location: " . BASE_URL . "cart.php");
     exit;
 }
 
@@ -45,8 +45,8 @@ try {
         'payment_method_types' => ['card'],
         'line_items' => $line_items,
         'mode' => 'payment',
-        'success_url' => 'http://localhost/Gloriolux/success.php?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => 'http://localhost/Gloriolux/cart.php',
+        'success_url' => BASE_URL_FULL . 'success.php?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => BASE_URL_FULL . 'cart.php',
     ]);
     
     // Redirect to Stripe Checkout
