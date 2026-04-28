@@ -1,3 +1,6 @@
+# =========================================================================
+# REWRITE RULES (SIMPLIFIED - KEEP .PHP)
+# =========================================================================
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
@@ -8,12 +11,7 @@
     RewriteCond %{HTTP_HOST} !^www\. [NC]
     RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # 2. Redirect index.php to root
+    # 2. Redirect index.php to root ONLY
     RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
     RewriteRule ^index\.php$ / [R=301,L]
-
-    # 3. Internally map clean URLs to .php (so /login works if someone types it)
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME}.php -f
-    RewriteRule ^(.+)$ $1.php [L]
 </IfModule>

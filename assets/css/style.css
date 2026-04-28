@@ -635,6 +635,20 @@ html, body {height: 100%;}
     color: #ffffff;
 }
 
+.admin-sidebar .brand-logo {
+    flex-direction: column;
+    gap: 8px;
+    white-space: normal;
+}
+
+.admin-sidebar .brand-logo img {
+    height: 45px;
+}
+
+.admin-sidebar .brand-logo .logo-text {
+    font-size: 1.5rem;
+}
+
 .admin-sidebar .brand-logo img,
 .footer .brand-logo img {
     filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255,255,255,0.1));
