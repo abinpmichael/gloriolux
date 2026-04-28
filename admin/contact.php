@@ -1,0 +1,86 @@
+<?php
+session_start();
+// Verify admin role
+if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: /Gloriolux/login.php');
+    exit;
+}
+require_once '../includes/db.php';
+
+// Handle delete
+if (isset($_GET['delete'])) {
+    $id = (int)$_GET['delete'];
+    $stmt = $pdo->prepare('DELETE FROM contacts WHERE id = ?');
+    $stmt->execute([$id]);
+    header('Location: contact.php?success=deleted');
+    exit;
+}
+
+// Fetch contacts
+$stmt = $pdo->query('SELECT * FROM contacts ORDER BY created_at DESC');
+$contacts = $stmt->fetchAll();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Messages | Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/Gloriolux/assets/css/style.css">
+    <style>
+        .admin-layout {display:flex; min-height:100vh;}
+        .admin-sidebar {width:250px; background:var(--primary-color); color:#fff; padding:2rem 1rem; display:flex; flex-direction:column;}
+        .admin-main {flex:1; padding:2rem; background:#f4f6f8;}
+        .data-table {width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+        .data-table th, .data-table td {padding:1rem; border-bottom:1px solid #eee;}
+        .data-table th {background:#f8f9fa;}
+        .admin-sidebar a { display: block; padding: 1rem; color: #ccc; border-radius: 8px; margin-bottom: 0.5rem; text-decoration:none; }
+        .admin-sidebar a:hover, .admin-sidebar a.active { background-color: rgba(255,255,255,0.1); color: #fff; }
+        .admin-logo { font-family: var(--font-heading); font-size: 1.5rem; text-align: center; margin-bottom: 3rem; color: #fff; }
+    </style>
+</head>
+<body>
+<div class="admin-layout">
+    <?php require_once 'includes/sidebar.php'; ?>
+    <div class="admin-main">
+        <h2>Contact Messages</h2>
+        <?php if(isset($_GET['success'])): ?>
+            <div style="background:#d4edda;color:#155724;padding:1rem;border-radius:5px;margin-bottom:1rem;">
+                Message deleted successfully.
+            </div>
+        <?php endif; ?>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($contacts as $c): ?>
+                <tr>
+                    <td><?= $c['id'] ?></td>
+                    <td><?= htmlspecialchars($c['name']) ?></td>
+                    <td><?= htmlspecialchars($c['email']) ?></td>
+                    <td><?= htmlspecialchars($c['subject']) ?></td>
+                    <td><?= nl2br(htmlspecialchars($c['message'])) ?></td>
+                    <td><?= $c['created_at'] ?></td>
+                    <td>
+                        <a href="?delete=<?= $c['id'] ?>" onclick="return confirm('Delete this message?');" style="color:red;">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
