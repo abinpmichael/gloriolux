@@ -1,4 +1,4 @@
-name: Deploy to Production Server
+name: Build and Push Docker Image
 
 on:
   push:
@@ -7,32 +7,28 @@ on:
       - master
 
 jobs:
-  web-deploy:
-    name: 🎉 Deploy to Server
+  build-and-push:
+    name: 🐳 Build and Push to Docker Hub
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
     steps:
-    - name: 🚚 Get latest code
+    - name: 🚚 Checkout code
       uses: actions/checkout@v4
-    
-    - name: 📂 Sync files via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      
+    - name: 🔑 Log in to Docker Hub
+      uses: docker/login-action@v3
       with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        # Optional: Define the port if it is not 21
-        # port: 21
-        # Optional: Define a server path if you don't want to deploy to the root
-        # server-dir: public_html/
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/.github/**
-          scratch/**
-          *.log
-          README.md
-          DEPLOYMENT_GUIDE.md
-          php_errors.log
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: 🏗️ Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: 🚀 Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/gloriolux:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/gloriolux:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/gloriolux:buildcache,mode=max

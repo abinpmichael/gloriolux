@@ -4,10 +4,10 @@ ini_set('display_errors', 0); // Hide errors from users (prevents leaking paths/
 ini_set('log_errors', 1);     // Enable error logging
 ini_set('error_log', __DIR__ . '/../php_errors.log'); // Write errors to this specific file
 
-$host = 'localhost';
-$dbname = 'gloriolux_db';
-$user = 'root'; // Default XAMPP user
-$pass = ''; // Default XAMPP password
+$host = getenv('DB_HOST') ?: 'localhost';
+$dbname = getenv('DB_NAME') ?: 'gloriolux_db';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') ?: '';
 
 // Determine the correct base URL depending on environment
 $isLocalhost = ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1');

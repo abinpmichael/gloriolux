@@ -1,0 +1,7 @@
+.git
+.github
+.dockerignore
+scratch
+php_errors.log
+DEPLOYMENT_GUIDE.md
+README.md
