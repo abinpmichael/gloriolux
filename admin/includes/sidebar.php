@@ -2,7 +2,12 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <div class="admin-sidebar">
-    <div class="admin-logo"><a href="<?= BASE_URL ?>admin/index.php"><img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux Admin" style="height: 50px; filter: brightness(0) invert(1);"></a></div>
+    <div class="admin-logo">
+        <a href="<?= BASE_URL ?>admin/index.php" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+            <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux Admin" style="height: 50px; filter: brightness(0) invert(1);">
+            <span style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: #fff;">Glorio<span style="color: rgba(255,255,255,0.7);">lux</span></span>
+        </a>
+    </div>
     <a href="index.php" class="<?= $current_page == 'index.php' ? 'active' : '' ?>"><i class="fas fa-home"></i> Dashboard</a>
     <a href="orders.php" class="<?= $current_page == 'orders.php' ? 'active' : '' ?>"><i class="fas fa-shopping-cart"></i> Orders</a>
     <a href="products.php" class="<?= $current_page == 'products.php' ? 'active' : '' ?>"><i class="fas fa-box"></i> Products</a>

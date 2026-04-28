@@ -33,7 +33,10 @@ require_once __DIR__.'/db.php';
 <body>
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="<?= BASE_URL ?>index.php" class="logo"><img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux" style="height: 50px;"></a>
+            <a href="<?= BASE_URL ?>index.php" class="logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux" style="height: 50px;">
+                <span style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--primary-color);">Glorio<span style="color: var(--secondary-color);">lux</span></span>
+            </a>
             <ul class="nav-links">
                 <li><a href="<?= BASE_URL ?>index.php">Home</a></li>
                 <li><a href="<?= BASE_URL ?>shop.php">Shop</a></li>

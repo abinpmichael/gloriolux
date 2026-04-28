@@ -3,7 +3,10 @@
     <footer class="footer">
         <div class="container footer-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
             <div class="footer-section brand-section">
-                <a href="<?= BASE_URL ?>index.php" class="logo"><img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux" style="height: 50px;"></a>
+                <a href="<?= BASE_URL ?>index.php" class="logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 1rem;">
+                    <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux" style="height: 50px;">
+                    <span style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #fff;">Glorio<span style="color: var(--secondary-color);">lux</span></span>
+                </a>
                 <p>Elevating everyday moments with artisanal, hand-poured luxury soy candles and premium gifting essentials.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-instagram"></i></a>
