@@ -1,0 +1,36 @@
+name: Deploy to Production Server
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy to Server
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+    
+    - name: 📂 Sync files via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        # Optional: Define the port if it is not 21
+        # port: 21
+        # Optional: Define a server path if you don't want to deploy to the root
+        # server-dir: public_html/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/.github/**
+          scratch/**
+          *.log
+          README.md
+          DEPLOYMENT_GUIDE.md
+          php_errors.log

@@ -36,6 +36,7 @@ $reviews = $stmt->fetchAll();
         .admin-sidebar a:hover, .admin-sidebar a.active { background-color: rgba(255,255,255,0.1); color: #fff; }
         .admin-logo { font-family: var(--font-heading); font-size: 1.5rem; text-align: center; margin-bottom: 3rem; color: #fff; }
     </style>
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
 </head>
 <body>
 <div class="admin-layout">

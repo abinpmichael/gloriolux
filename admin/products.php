@@ -109,6 +109,7 @@ $categories = $cat_stmt->fetchAll();
         .modal-content { background:#fff; width:100%; max-width:600px; margin:50px auto; padding:2rem; border-radius:12px; position:relative; }
         .modal-close { position:absolute; right:20px; top:20px; cursor:pointer; font-size:1.5rem; }
     </style>
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
 </head>
 <body>
 <div class="admin-layout">

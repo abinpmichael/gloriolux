@@ -41,6 +41,7 @@ $orders = $stmt->fetchAll();
         .status-Delivered { background: #d4edda; color: #155724; }
         .status-Cancelled { background: #f8d7da; color: #721c24; }
     </style>
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
 </head>
 <body>
 <div class="admin-layout">

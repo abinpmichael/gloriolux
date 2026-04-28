@@ -73,6 +73,7 @@ require_once '../includes/db.php';
         .stat-card h3 { color: var(--text-light); font-size: 0.9rem; font-family: var(--font-body); }
         .stat-card .value { font-size: 2rem; font-weight: bold; margin-top: 0.5rem; color: var(--primary-color); }
     </style>
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
 </head>
 <body>
 

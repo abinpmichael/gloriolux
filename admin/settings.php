@@ -67,6 +67,7 @@ $admin_email = $settings_data['admin_email'] ?? 'admin@gloriolux.com';
         .admin-logo span { color: var(--secondary-color); }
         .settings-card { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 600px; margin-bottom: 2rem; }
     </style>
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
 </head>
 <body>
 

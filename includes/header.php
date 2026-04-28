@@ -27,6 +27,7 @@ require_once __DIR__.'/db.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css?v=<?php echo time(); ?>">
 </head>
 <body>
