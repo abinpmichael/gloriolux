@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build, Test, and Deploy
 
 on:
   push:
@@ -7,9 +7,29 @@ on:
       - master
 
 jobs:
-  build-and-push:
-    name: 🐳 Build and Push to Docker Hub
+  build-and-test:
+    name: 🧪 Build & Test
     runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚚 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐘 Setup PHP for Testing
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        
+    - name: 🔍 Run Tests (PHP Syntax Check)
+      run: |
+        # This will scan all PHP files to ensure there are no syntax errors
+        find . -name "*.php" ! -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+
+  deploy-to-live:
+    name: 🚀 Deploy to Live Server (Docker Hub)
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: production # 🛑 This creates the manual approval step in GitHub!
     
     steps:
     - name: 🚚 Checkout code
@@ -24,7 +44,7 @@ jobs:
     - name: 🏗️ Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
       
-    - name: 🚀 Build and push Docker image
+    - name: 🐳 Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
