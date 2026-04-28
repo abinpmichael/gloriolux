@@ -35,4 +35,4 @@ jobs:
           *.log
           README.md
           DEPLOYMENT_GUIDE.md
-          php_errors.lo
+          php_errors.log
