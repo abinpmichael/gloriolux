@@ -1,10 +1,5 @@
 <?php
 session_start();
-// Verify admin role
-if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ' . BASE_URL . 'login.php');
-    exit;
-}
 require_once '../includes/db.php';
 
 // Handle delete
@@ -12,76 +7,79 @@ if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     $stmt = $pdo->prepare('DELETE FROM contacts WHERE id = ?');
     $stmt->execute([$id]);
-    header('Location: contact.php?success=deleted');
-    exit;
+    header('Location: contact.php?success=deleted'); exit;
 }
 
-// Fetch contacts
+// Mark as read
+if (isset($_GET['read'])) {
+    $stmt = $pdo->prepare("UPDATE contacts SET status = 'read' WHERE id = ?");
+    $stmt->execute([(int)$_GET['read']]);
+    header('Location: contact.php?success=read'); exit;
+}
+
 $stmt = $pdo->query('SELECT * FROM contacts ORDER BY created_at DESC');
 $contacts = $stmt->fetchAll();
+
+$admin_page_title = 'Contact Messages';
+require_once 'includes/admin_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Messages | Admin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
-    <style>
-        .admin-layout {display:flex; min-height:100vh;}
-        .admin-sidebar {width:250px; background:var(--primary-color); color:#fff; padding:2rem 1rem; display:flex; flex-direction:column;}
-        .admin-main {flex:1; padding:2rem; background:#f4f6f8;}
-        .data-table {width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-        .data-table th, .data-table td {padding:1rem; border-bottom:1px solid #eee;}
-        .data-table th {background:#f8f9fa;}
-        .admin-sidebar a { display: block; padding: 1rem; color: #ccc; border-radius: 8px; margin-bottom: 0.5rem; text-decoration:none; }
-        .admin-sidebar a:hover, .admin-sidebar a.active { background-color: rgba(255,255,255,0.1); color: #fff; }
-        .admin-logo { font-family: var(--font-heading); font-size: 1.5rem; text-align: center; margin-bottom: 3rem; color: #fff; }
-    </style>
-    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
-</head>
-<body>
-<div class="admin-layout">
-    <?php require_once 'includes/sidebar.php'; ?>
-    <div class="admin-main">
-        <h2>Contact Messages</h2>
-        <?php if(isset($_GET['success'])): ?>
-            <div style="background:#d4edda;color:#155724;padding:1rem;border-radius:5px;margin-bottom:1rem;">
-                Message deleted successfully.
-            </div>
-        <?php endif; ?>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Subject</th>
-                    <th>Message</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($contacts as $c): ?>
-                <tr>
-                    <td><?= $c['id'] ?></td>
-                    <td><?= htmlspecialchars($c['name']) ?></td>
-                    <td><?= htmlspecialchars($c['email']) ?></td>
-                    <td><?= htmlspecialchars($c['subject']) ?></td>
-                    <td><?= nl2br(htmlspecialchars($c['message'])) ?></td>
-                    <td><?= $c['created_at'] ?></td>
-                    <td>
-                        <a href="?delete=<?= $c['id'] ?>" onclick="return confirm('Delete this message?');" style="color:red;">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+
+<div class="admin-page-header">
+    <h2>Contact Messages</h2>
 </div>
-</body>
-</html>
+
+<?php if(isset($_GET['success'])): ?>
+    <div class="admin-alert admin-alert-success">
+        <i class="fas fa-check-circle"></i>
+        <?= $_GET['success'] === 'deleted' ? 'Message deleted successfully.' : 'Message marked as read.' ?>
+    </div>
+<?php endif; ?>
+
+<div class="data-table-wrap">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($contacts as $c): ?>
+            <tr style="<?= ($c['status'] ?? 'unread') === 'unread' ? 'font-weight:600;' : '' ?>">
+                <td><?= date('M j, Y', strtotime($c['created_at'])) ?></td>
+                <td><?= htmlspecialchars($c['name']) ?></td>
+                <td><?= htmlspecialchars($c['email']) ?></td>
+                <td><?= htmlspecialchars($c['subject']) ?></td>
+                <td style="max-width:280px;"><?= nl2br(htmlspecialchars($c['message'])) ?></td>
+                <td>
+                    <?php if(($c['status'] ?? 'unread') === 'unread'): ?>
+                        <span class="status-badge" style="background:#fff3cd;color:#856404;">Unread</span>
+                    <?php else: ?>
+                        <span class="status-badge" style="background:#d1e7dd;color:#0f5132;">Read</span>
+                    <?php endif; ?>
+                </td>
+                <td style="display:flex;gap:0.75rem;align-items:center;">
+                    <?php if(($c['status'] ?? 'unread') === 'unread'): ?>
+                        <a href="?read=<?= $c['id'] ?>" title="Mark as Read" style="color:var(--secondary-color);">
+                            <i class="fas fa-check"></i>
+                        </a>
+                    <?php endif; ?>
+                    <a href="?delete=<?= $c['id'] ?>" onclick="return confirm('Delete this message?');" title="Delete" style="color:#ff6b6b;">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php if(count($contacts) == 0): ?>
+                <tr><td colspan="7" style="text-align:center;">No messages yet.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<?php require_once 'includes/admin_footer.php'; ?>

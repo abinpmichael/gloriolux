@@ -1,0 +1,716 @@
+/* ============================================================
+   Gloriolux Admin Panel – Shared Stylesheet  (Mobile-First)
+   ============================================================ */
+
+/* ── Reset / Base ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    color: #333;
+    background: #f4f6f9;
+}
+
+/* ── Layout ─────────────────────────────────────────────── */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.admin-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #1a1a1a 0%, #111111 100%);
+    color: #fff;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;            /* always fixed so overlay works on mobile */
+    left: 0; top: 0;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 300;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s ease;
+    transform: translateX(-100%);   /* hidden by default on all screens */
+}
+
+/* Desktop: sidebar always visible */
+@media (min-width: 901px) {
+    .admin-sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        transform: translateX(0);   /* always open */
+    }
+}
+
+.admin-sidebar.open {
+    transform: translateX(0);
+    box-shadow: 6px 0 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Backdrop overlay when sidebar is open on mobile */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 299;
+    backdrop-filter: blur(2px);
+}
+
+.sidebar-backdrop.active {
+    display: block;
+}
+
+/* ── Sidebar Logo ────────────────────────────────────────── */
+.admin-sidebar-logo {
+    padding: 1.8rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.admin-sidebar-logo .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.admin-sidebar-logo .brand-logo img {
+    height: 38px;
+}
+
+.admin-sidebar-logo .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.admin-sidebar-logo .logo-highlight {
+    color: #d4af37;
+}
+
+/* Close button inside sidebar (mobile) */
+.sidebar-close-btn {
+    display: none;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.sidebar-close-btn:hover { background: rgba(255,255,255,0.2); }
+
+@media (max-width: 900px) {
+    .sidebar-close-btn { display: flex; }
+}
+
+/* ── Sidebar Navigation ──────────────────────────────────── */
+.admin-sidebar-nav {
+    padding: 1rem 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.admin-sidebar-nav .nav-section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    padding: 1rem 0.75rem 0.4rem;
+    margin-top: 0.25rem;
+    user-select: none;
+}
+
+.admin-sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem 1rem;
+    color: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-sidebar-nav a i {
+    width: 18px;
+    text-align: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.admin-sidebar-nav a:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.admin-sidebar-nav a.active {
+    background: rgba(212, 175, 55, 0.15);
+    color: #d4af37;
+    font-weight: 600;
+}
+
+.admin-sidebar-nav a.active i {
+    color: #d4af37;
+}
+
+/* ── Sidebar Footer ──────────────────────────────────────── */
+.admin-sidebar-footer {
+    padding: 1rem 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.admin-sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.admin-sidebar-footer a:hover {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+}
+
+.admin-sidebar-footer a.logout-link:hover {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+}
+
+/* ── Main Content Area ───────────────────────────────────── */
+.admin-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f4f6f9;
+    min-width: 0;
+}
+
+/* ── Custom Scrollbar for Sidebar ────────────────────────── */
+.admin-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.admin-sidebar::-webkit-scrollbar-track {
+    background: #111;
+}
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+}
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+@media (max-width: 900px) {
+    .admin-main {
+        /* No margin needed since sidebar is fixed/hidden */
+    }
+}
+
+/* ── Top Bar ─────────────────────────────────────────────── */
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid #e8eaed;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    gap: 1rem;
+}
+
+/* Hamburger button — always visible now (toggling sidebar) */
+.admin-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #444;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.admin-menu-toggle:hover {
+    background: #f0f0f0;
+}
+
+.admin-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.admin-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* Hide username label on very small screens */
+@media (max-width: 480px) {
+    .admin-topbar-user span.username-text { display: none; }
+}
+
+.admin-topbar-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #777;
+    text-decoration: none;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+/* Hide link labels on very small screens, keep icons */
+@media (max-width: 480px) {
+    .admin-topbar-link span.link-text { display: none; }
+    .admin-topbar-right { gap: 0.6rem; }
+}
+
+.admin-topbar-link:hover { color: #d4af37; }
+.admin-topbar-logout:hover { color: #ff6b6b; }
+
+/* ── Content Wrapper ─────────────────────────────────────── */
+.admin-content {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+@media (min-width: 901px) {
+    .admin-content { padding: 2rem; }
+}
+
+/* ── Page Header Row ─────────────────────────────────────── */
+.admin-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-page-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin: 0;
+    color: #1a1a1a;
+}
+
+@media (min-width: 601px) {
+    .admin-page-header h2 { font-size: 1.6rem; }
+}
+
+/* ── Alert / Flash Messages ──────────────────────────────── */
+.admin-alert {
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    line-height: 1.5;
+}
+
+.admin-alert-success {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.admin-alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+/* ── Stat Cards Grid ─────────────────────────────────────── */
+.stat-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);    /* 2 cols on mobile */
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 540px) {
+    .stat-cards-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+}
+
+@media (min-width: 900px) {
+    .stat-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.stat-card {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+@media (min-width: 901px) {
+    .stat-card { padding: 1.5rem; }
+}
+
+.stat-card h3 {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin: 0 0 0.5rem;
+}
+
+.stat-card .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+@media (min-width: 540px) {
+    .stat-card .value { font-size: 2rem; }
+}
+
+.stat-card .stat-icon {
+    font-size: 1.3rem;
+    color: #d4af37;
+    margin-bottom: 0.6rem;
+}
+
+/* ── Data Table Wrapper ──────────────────────────────────── */
+.data-table-wrap {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow-x: auto;           /* fallback scroll for very wide tables */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ── Data Table ──────────────────────────────────────────── */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    min-width: 500px;           /* prevents squishing on medium widths */
+}
+
+.data-table th {
+    padding: 0.85rem 1rem;
+    background: #f8f9fa;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #f2f2f2;
+    vertical-align: middle;
+    word-break: break-word;
+}
+
+.data-table tbody tr:hover { background: #fafbfc; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+/* ── Card-style table on very small screens ──────────────── */
+@media (max-width: 600px) {
+    /* Allow the wrapper to shrink to viewport */
+    .data-table-wrap { overflow-x: visible; border-radius: 0; box-shadow: none; background: transparent; }
+
+    .data-table,
+    .data-table thead,
+    .data-table tbody,
+    .data-table th,
+    .data-table td,
+    .data-table tr { display: block; }
+
+    .data-table thead { display: none; }
+
+    .data-table tbody tr {
+        background: #fff;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 0.25rem 0;
+        overflow: hidden;
+    }
+
+    .data-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid #f2f2f2;
+        font-size: 0.875rem;
+        min-height: 44px;
+        gap: 0.5rem;
+    }
+
+    .data-table td:last-child { border-bottom: none; }
+
+    /* Label before each cell */
+    .data-table td[data-label]::before {
+        content: attr(data-label);
+        font-weight: 700;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #999;
+        white-space: nowrap;
+        flex-shrink: 0;
+        margin-right: 0.5rem;
+    }
+
+    /* Action cells — right-align */
+    .data-table td:last-child {
+        justify-content: flex-end;
+    }
+}
+
+/* ── Forms inside admin ──────────────────────────────────── */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.4rem;
+    color: #444;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Lato', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+}
+
+/* Stack flex rows on mobile */
+@media (max-width: 520px) {
+    div[style*="display:flex"][style*="gap:1rem"],
+    div[style*="display: flex"][style*="gap: 1rem"] {
+        flex-direction: column !important;
+    }
+}
+
+/* ── Modals ──────────────────────────────────────────────── */
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+@media (min-width: 601px) {
+    .admin-modal { padding: 2rem 1rem; }
+}
+
+.admin-modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 620px;
+    margin: auto;
+    padding: 1.5rem;
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 601px) {
+    .admin-modal-content { padding: 2.5rem; }
+}
+
+.admin-modal-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #777;
+    background: #f0f0f0;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    border: none;
+}
+
+.admin-modal-close:hover { background: #ddd; color: #333; }
+
+/* ── Settings Card ───────────────────────────────────────── */
+.settings-card {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    max-width: 640px;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 601px) {
+    .settings-card { padding: 2rem; margin-bottom: 2rem; }
+}
+
+/* ── Status Badges ───────────────────────────────────────── */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-Processing { background: #fff3cd; color: #856404; }
+.status-Shipped    { background: #cfe2ff; color: #004085; }
+.status-Delivered  { background: #d1e7dd; color: #0f5132; }
+.status-Cancelled  { background: #f8d7da; color: #721c24; }
+
+/* ── Order update form in table ──────────────────────────── */
+.order-update-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.order-update-form select {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    min-width: 110px;
+}
+
+/* ── Products grid ───────────────────────────────────────── */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+/* ── Buttons (global admin) ──────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Lato', sans-serif;
+}
+
+.btn-primary {
+    background: #d4af37;
+    color: #fff;
+    border-color: #d4af37;
+}
+
+.btn-primary:hover {
+    background: #c09b2e;
+    border-color: #c09b2e;
+    color: #fff;
+}
+
+.btn-outline {
+    background: transparent;
+    border-color: currentColor;
+}
+
+/* Full-width button on mobile if alone */
+@media (max-width: 480px) {
+    .admin-page-header .btn { font-size: 0.8rem; padding: 0.5rem 0.85rem; }
+}

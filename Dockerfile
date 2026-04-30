@@ -1,19 +1,35 @@
 FROM php:8.2-apache
 
-# Install required PHP extensions for MySQL and other dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     zip \
-    && docker-php-ext-install pdo pdo_mysql zip
+    unzip \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql zip gd
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy all application files to the Apache document root
+# Set working directory
+WORKDIR /var/www/html
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy application files
 COPY . /var/www/html/
 
-# Ensure the vendor directory and other potential cache/upload directories have right permissions
-# The uploads folder might need write permissions
+# Install PHP dependencies if composer.json exists
+RUN if [ -f composer.json ]; then \
+    composer install --no-interaction --optimize-autoloader; \
+    fi
+
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 

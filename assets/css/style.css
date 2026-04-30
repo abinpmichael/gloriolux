@@ -658,3 +658,90 @@ html, body {height: 100%;}
 .footer .brand-logo:hover img {
     filter: brightness(0) invert(1) drop-shadow(0 6px 12px rgba(255,255,255,0.5));
 }
+/* Trust Badges / Benefits */
+.benefits-section {
+    padding: 4rem 0;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    background: #fff;
+}
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+}
+@media (max-width: 900px) { .benefits-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+.benefit-item i {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+.benefit-item h4 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+.benefit-item p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Sales Driven Badges */
+.badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 5;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.badge-sale { background: #ff6b6b; color: #fff; animation: pulse-red 2s infinite; }
+.badge-new { background: var(--secondary-color); color: #fff; }
+
+@keyframes pulse-red {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Interactive Elements */
+.add-to-cart-btn {
+    width: 100%;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.add-to-cart-btn:active {
+    transform: scale(0.95);
+}
+
+/* Improved Typography for Sales */
+.section-subtitle {
+    text-align: center;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Newsletter Premium */
+.newsletter-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #333 100%);
+    padding: 5rem 0;
+    text-align: center;
+}
+.newsletter-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.newsletter-content h2 { color: #fff; font-size: 2.5rem; }
+.newsletter-content p { color: #ccc; margin-bottom: 2rem; }

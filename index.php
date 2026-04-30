@@ -1,99 +1,145 @@
 <?php require_once 'includes/header.php'; ?>
 <?php
 // Fetch featured products
-$stmt = $pdo->query("SELECT * FROM products WHERE is_hidden = 0 ORDER BY id DESC LIMIT 4");
+$stmt = $pdo->query("SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.is_hidden = 0 ORDER BY p.id DESC LIMIT 4");
 $featured_products = $stmt->fetchAll();
-?>
-<?php
+
 // Fetch slides
 $stmt_slides = $pdo->query("SELECT * FROM slides ORDER BY display_order ASC");
 $slides = $stmt_slides->fetchAll();
 ?>
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero-slider" style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000;">
-            <?php foreach($slides as $index => $slide): ?>
-                <div class="slide" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: <?= $index === 0 ? '1' : '0' ?>; transition: opacity 1s ease-in-out; z-index: <?= $index === 0 ? '1' : '0' ?>;" id="slide-<?= $index ?>">
-                    <img src="<?= BASE_URL ?><?= htmlspecialchars($slide['image_url']) ?>" alt="Slide" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
-                    <div class="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; color: #fff; z-index: 2;">
-                        <h1 style="font-size: 4rem; margin-bottom: 1rem; font-family: var(--font-heading); text-shadow: 2px 2px 8px rgba(0,0,0,0.6);"><?= htmlspecialchars($slide['title']) ?></h1>
-                        <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; text-shadow: 1px 1px 4px rgba(0,0,0,0.6);"><?= htmlspecialchars($slide['subtitle']) ?></p>
-                        <?php if(!empty($slide['button_text']) && !empty($slide['button_url'])): ?>
-                            <a href="<?= htmlspecialchars($slide['button_url']) ?>" class="btn btn-primary" style="padding: 1rem 2.5rem; border-radius: 30px;"><?= htmlspecialchars($slide['button_text']) ?></a>
-                        <?php endif; ?>
-                    </div>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider" style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000;">
+        <?php foreach($slides as $index => $slide): ?>
+            <div class="slide" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: <?= $index === 0 ? '1' : '0' ?>; transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1); z-index: <?= $index === 0 ? '1' : '0' ?>;" id="slide-<?= $index ?>">
+                <img src="<?= BASE_URL ?><?= htmlspecialchars($slide['image_url']) ?>" alt="Slide" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7;">
+                <div class="container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; color: #fff; z-index: 2;">
+                    <span class="section-subtitle fade-up" style="color: var(--secondary-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Handcrafted Excellence</span>
+                    <h1 style="font-size: clamp(2.5rem, 8vw, 4.5rem); margin-bottom: 1.5rem; font-family: var(--font-heading); text-shadow: 0 4px 15px rgba(0,0,0,0.4); font-weight: 700;"><?= htmlspecialchars($slide['title']) ?></h1>
+                    <p style="font-size: 1.25rem; margin-bottom: 2.5rem; max-width: 650px; margin-left: auto; margin-right: auto; text-shadow: 0 2px 5px rgba(0,0,0,0.4); font-weight: 300; line-height: 1.6;"><?= htmlspecialchars($slide['subtitle']) ?></p>
+                    <?php if(!empty($slide['button_text']) && !empty($slide['button_url'])): ?>
+                        <a href="<?= htmlspecialchars($slide['button_url']) ?>" class="btn btn-primary" style="padding: 1.2rem 3rem; box-shadow: 0 10px 25px rgba(212,175,55,0.4);"><?= htmlspecialchars($slide['button_text']) ?></a>
+                    <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
+        
+        <?php if(count($slides) > 1): ?>
+            <button onclick="nextSlide()" style="position: absolute; right: 30px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: all 0.3s;"><i class="fas fa-chevron-right"></i></button>
+            <button onclick="prevSlide()" style="position: absolute; left: 30px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: all 0.3s;"><i class="fas fa-chevron-left"></i></button>
             
-            <?php if(count($slides) > 1): ?>
-                <button onclick="nextSlide()" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: #fff; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.5rem;"><i class="fas fa-chevron-right"></i></button>
-                <button onclick="prevSlide()" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: #fff; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.5rem;"><i class="fas fa-chevron-left"></i></button>
-                
-                <script>
-                    let currentSlide = 0;
-                    const slides = document.querySelectorAll('.slide');
-                    function showSlide(index) {
-                        slides.forEach((s, i) => {
-                            s.style.opacity = (i === index) ? '1' : '0';
-                            s.style.zIndex = (i === index) ? '1' : '0';
-                        });
-                    }
-                    function nextSlide() {
-                        currentSlide = (currentSlide + 1) % slides.length;
-                        showSlide(currentSlide);
-                    }
-                    function prevSlide() {
-                        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                        showSlide(currentSlide);
-                    }
-                    setInterval(nextSlide, 6000); // Auto-advance every 6 seconds
-                </script>
-            <?php endif; ?>
-        </section>
-        <!-- Featured Collection Section -->
-        <section class="section bg-light">
-            <div class="container">
-                <h2 class="section-title fade-up">Signature Collection</h2>
-                <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2.5rem;">
-                    <?php foreach($featured_products as $product): ?>
-                        <div class="product-card fade-up">
-                            <a href="<?= BASE_URL ?>product.php?id=<?php echo $product['id']; ?>">
-                                <div class="product-img-wrap">
-                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_url']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
-                                    <div class="product-overlay">
-                                        <form action="<?= BASE_URL ?>cart_add.php" method="POST">
-                                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="btn btn-primary add-to-cart-btn" style="padding: 0.5rem 1.5rem;">Add to Cart</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="product-info">
-                                    <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
-                                    <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
-                                </div>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
+            <script>
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('.slide');
+                function showSlide(index) {
+                    slides.forEach((s, i) => {
+                        s.style.opacity = (i === index) ? '1' : '0';
+                        s.style.zIndex = (i === index) ? '1' : '0';
+                    });
+                }
+                function nextSlide() {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    showSlide(currentSlide);
+                }
+                function prevSlide() {
+                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(currentSlide);
+                }
+                setInterval(nextSlide, 7000);
+            </script>
+        <?php endif; ?>
+    </section>
+
+    <!-- Trust / Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="benefits-grid">
+                <div class="benefit-item fade-up">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h4>Global Shipping</h4>
+                    <p>Premium tracked delivery to your doorstep.</p>
                 </div>
-                <div style="text-align: center; margin-top: 3rem;">
-                    <a href="<?= BASE_URL ?>shop.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">View All Products</a>
+                <div class="benefit-item fade-up delay-100">
+                    <i class="fas fa-leaf"></i>
+                    <h4>100% Soy Wax</h4>
+                    <p>Eco-friendly, sustainable, and clean burning.</p>
+                </div>
+                <div class="benefit-item fade-up delay-200">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Secure Checkout</h4>
+                    <p>SSL encrypted payments with Stripe.</p>
+                </div>
+                <div class="benefit-item fade-up delay-300">
+                    <i class="fas fa-gift"></i>
+                    <h4>Luxury Packaging</h4>
+                    <p>Exquisite gift boxes with every order.</p>
                 </div>
             </div>
-        </section>
-        <!-- About / Concept Section -->
-        <section class="section" style="background-color: var(--primary-color); color: #fff;">
-            <div class="container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 4rem;">
-                <div class="fade-up" style="flex: 1; min-width: 300px;">
-                    <img src="<?= BASE_URL ?>assets/img/gifting.png" alt="Gifting" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
-                </div>
-                <div class="fade-up delay-200" style="flex: 1; min-width: 300px;">
-                    <h2 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--secondary-color);">The Art of Gifting</h2>
-                    <p style="font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 300; color: #ccc;">Discover our curated selection of luxury gifting sets. Perfect for any occasion, our sets are beautifully packaged and ready to delight your loved ones.</p>
-                    <p style="font-size: 1.1rem; margin-bottom: 2.5rem; font-weight: 300; color: #ccc;">Each set is thoughtfully composed to create an unforgettable olfactory experience.</p>
-                    <a href="<?= BASE_URL ?>shop.php?category=2" class="btn btn-primary">Explore Gifts</a>
-                </div>
+        </div>
+    </section>
+
+    <!-- Signature Collection -->
+    <section class="section bg-light">
+        <div class="container">
+            <span class="section-subtitle">Exquisite Selection</span>
+            <h2 class="section-title fade-up">Signature Collection</h2>
+            <div class="product-grid">
+                <?php foreach($featured_products as $product): ?>
+                    <div class="product-card fade-up">
+                        <a href="<?= BASE_URL ?>product.php?id=<?= $product['id']; ?>">
+                            <div class="product-img-wrap">
+                                <?php if($product['price'] < 50): ?>
+                                    <span class="badge badge-sale">Best Seller</span>
+                                <?php endif; ?>
+                                <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']); ?>" alt="<?= htmlspecialchars($product['name']); ?>" class="product-img" loading="lazy">
+                                <div class="product-overlay">
+                                    <form action="<?= BASE_URL ?>cart_add.php" method="POST" style="width:100%;">
+                                        <input type="hidden" name="product_id" value="<?= $product['id']; ?>">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary add-to-cart-btn">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px;"><?= htmlspecialchars($product['category_name'] ?? '') ?></span>
+                                <h3 class="product-title"><?= htmlspecialchars($product['name']); ?></h3>
+                                <div class="product-price">$<?= number_format($product['price'], 2); ?></div>
+                            </div>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        </section>
-    </main>
-    <?php require_once 'includes/footer.php'; ?>
+            <div style="text-align: center; margin-top: 4rem;">
+                <a href="<?= BASE_URL ?>shop.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Explore All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action / Featured Promo -->
+    <section class="section" style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('<?= BASE_URL ?>assets/img/gifting.png'); background-size: cover; background-position: center; background-attachment: fixed; color: #fff; padding: 10rem 0;">
+        <div class="container" style="text-align: center; max-width: 800px;">
+            <span class="section-subtitle" style="color: var(--secondary-color);">Perfect for Gifting</span>
+            <h2 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1.5rem; font-family: var(--font-heading);">Crafting Moments, One Scent at a Time</h2>
+            <p style="font-size: 1.2rem; color: #ddd; margin-bottom: 3rem; line-height: 1.8; font-weight: 300;">Elevate your space with our curated luxury gifting sets. Designed for those who appreciate the finer things in life.</p>
+            <a href="<?= BASE_URL ?>shop.php?category=2" class="btn btn-primary" style="padding: 1.2rem 3.5rem;">Shop Gifting Sets</a>
+        </div>
+    </section>
+
+    <!-- Newsletter Capture -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content fade-up">
+                <span class="section-subtitle">Stay Inspired</span>
+                <h2>Join the Inner Circle</h2>
+                <p>Subscribe for exclusive access to new collection launches, limited editions, and luxury scenting tips.</p>
+                <form action="<?= BASE_URL ?>subscribe.php" method="POST" class="newsletter-form" style="max-width: 500px; margin: 0 auto;">
+                    <input type="email" name="email" placeholder="Your email address" required style="border-radius: 40px 0 0 40px; padding: 1.2rem 2rem;">
+                    <button type="submit" style="border-radius: 0 40px 40px 0; padding: 0 2.5rem; font-weight: 700;">Join</button>
+                </form>
+                <p style="font-size: 0.8rem; margin-top: 1.5rem; opacity: 0.6;">By subscribing, you agree to our Privacy Policy.</p>
+            </div>
+        </div>
+    </section>
+
+<?php require_once 'includes/footer.php'; ?>
