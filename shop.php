@@ -22,12 +22,13 @@ $categories = $cat_stmt->fetchAll();
     <h1 style="text-align: center; margin-bottom: 2rem; font-family: var(--font-heading);">Our Collection</h1>
     
     <!-- Category Filter -->
-    <div style="text-align: center; margin-bottom: 3rem;">
-        <a href="shop.php" class="btn <?php echo !$category_id ? 'btn-primary' : 'btn-outline'; ?>" style="<?php echo !$category_id ? '' : 'color: var(--primary-color); border-color: var(--primary-color);'; ?> margin: 0 0.5rem;">All</a>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 3rem;">
+        <a href="shop.php" class="btn <?php echo !$category_id ? 'btn-primary' : 'btn-outline'; ?>" style="<?php echo !$category_id ? '' : 'color: var(--primary-color); border-color: var(--primary-color);'; ?>">All</a>
         <?php foreach($categories as $cat): ?>
-            <a href="shop.php?category=<?php echo $cat['id']; ?>" class="btn <?php echo $category_id == $cat['id'] ? 'btn-primary' : 'btn-outline'; ?>" style="<?php echo $category_id == $cat['id'] ? '' : 'color: var(--primary-color); border-color: var(--primary-color);'; ?> margin: 0 0.5rem;"><?php echo htmlspecialchars($cat['name']); ?></a>
+            <a href="shop.php?category=<?php echo $cat['id']; ?>" class="btn <?php echo $category_id == $cat['id'] ? 'btn-primary' : 'btn-outline'; ?>" style="<?php echo $category_id == $cat['id'] ? '' : 'color: var(--primary-color); border-color: var(--primary-color);'; ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
         <?php endforeach; ?>
     </div>
+
 
     <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2.5rem;">
         <?php foreach($products as $product): ?>

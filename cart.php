@@ -16,6 +16,41 @@ $cart_items = $stmt->fetchAll();
 $total = 0;
 ?>
 
+<style>
+    @media (max-width: 600px) {
+        .cart-table thead {
+            display: none;
+        }
+        .cart-table tr {
+            display: block;
+            border-bottom: 2px solid var(--glass-border);
+            padding: 1rem 0;
+        }
+        .cart-table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border: none !important;
+            text-align: right;
+        }
+        .cart-table td[data-label]::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: var(--text-light);
+            text-align: left;
+            margin-right: 1rem;
+        }
+        .cart-table td:first-child {
+            display: flex;
+            justify-content: flex-start;
+            text-align: left;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+        }
+    }
+</style>
+
 <div class="container" style="padding-top: 120px; padding-bottom: 80px; min-height: 70vh;">
     <h1 style="text-align: center; margin-bottom: 3rem; font-family: var(--font-heading);">Your Shopping Cart</h1>
 
@@ -23,8 +58,9 @@ $total = 0;
         <div style="display: flex; flex-wrap: wrap; gap: 3rem;">
             <!-- Cart Items -->
             <div style="flex: 2; min-width: 300px;">
-                <div class="glass-panel" style="padding: 2rem;">
-                    <table style="width: 100%; border-collapse: collapse;">
+                <div class="glass-panel" style="padding: 2rem; overflow-x: auto;">
+
+                    <table class="cart-table" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr style="border-bottom: 1px solid var(--glass-border); text-align: left;">
                                 <th style="padding-bottom: 1rem;">Product</th>
@@ -44,19 +80,20 @@ $total = 0;
                                     <img src="<?= BASE_URL ?><?php echo htmlspecialchars($item['image_url']); ?>" alt="Product" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                                     <span style="font-weight: 600;"><?php echo htmlspecialchars($item['name']); ?></span>
                                 </td>
-                                <td style="padding: 1rem 0;">$<?php echo number_format($item['price'], 2); ?></td>
-                                <td style="padding: 1rem 0;">
+                                <td style="padding: 1rem 0;" data-label="Price">$<?php echo number_format($item['price'], 2); ?></td>
+                                <td style="padding: 1rem 0;" data-label="Quantity">
                                     <form action="<?= BASE_URL ?>cart_update.php" method="POST" style="display:flex; align-items:center; gap:5px;">
                                         <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">
                                         <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock'] > 0 ? $item['stock'] : 10; ?>" style="width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 0.3rem;" onchange="this.form.submit()">
                                     </form>
                                 </td>
-                                <td style="padding: 1rem 0; font-weight: bold;">$<?php echo number_format($item_total, 2); ?></td>
+                                <td style="padding: 1rem 0; font-weight: bold;" data-label="Total">$<?php echo number_format($item_total, 2); ?></td>
                                 <td style="padding: 1rem 0; text-align: right;">
                                     <a href="<?= BASE_URL ?>cart_remove.php?id=<?php echo $item['cart_id']; ?>" style="color: red;"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
+
                         </tbody>
                     </table>
                 </div>

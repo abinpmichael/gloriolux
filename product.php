@@ -60,21 +60,22 @@ require_once 'includes/header.php';
                     <?= nl2br(htmlspecialchars($product['description'])) ?>
                 </div>
 
-                <form action="<?= BASE_URL ?>cart_add.php" method="POST" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
+                <form action="<?= BASE_URL ?>cart_add.php" method="POST" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     
-                    <div style="display: flex; border: 1px solid #ddd; border-radius: 30px; overflow: hidden; background: #fff;">
+                    <div style="display: flex; border: 1px solid #ddd; border-radius: 30px; overflow: hidden; background: #fff; flex-shrink: 0;">
                         <button type="button" onclick="document.getElementById('qty').stepDown()" style="background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; color: var(--text-color);"><i class="fas fa-minus"></i></button>
                         <input type="number" name="quantity" id="qty" value="1" min="1" max="<?= $product['stock'] > 0 ? $product['stock'] : 10 ?>" style="width: 50px; text-align: center; border: none; font-size: 1rem; -moz-appearance: textfield; pointer-events: none;">
                         <button type="button" onclick="document.getElementById('qty').stepUp()" style="background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; color: var(--text-color);"><i class="fas fa-plus"></i></button>
                     </div>
                     
                     <?php if ($product['stock'] > 0): ?>
-                        <button type="submit" class="btn btn-primary" style="flex: 1; padding: 1rem; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">Add to Cart</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">Add to Cart</button>
                     <?php else: ?>
-                        <button type="button" class="btn btn-outline" style="flex: 1; padding: 1rem; border-radius: 30px; font-size: 1.1rem; cursor: not-allowed;" disabled>Out of Stock</button>
+                        <button type="button" class="btn btn-outline" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: 30px; font-size: 1.1rem; cursor: not-allowed;" disabled>Out of Stock</button>
                     <?php endif; ?>
                 </form>
+
 
                 <!-- Product Features / Guarantees -->
                 <ul style="list-style: none; padding: 0; color: var(--text-color); font-size: 0.95rem; line-height: 2;">
