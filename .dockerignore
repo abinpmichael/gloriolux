@@ -1,7 +1,13 @@
 .git
 .github
 .dockerignore
+Dockerfile
+docker-compose.yml
 scratch
 php_errors.log
 DEPLOYMENT_GUIDE.md
 README.md
+vendor
+uploads
+node_modules
+.env
