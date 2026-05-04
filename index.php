@@ -104,7 +104,7 @@ $slides = $stmt_slides->fetchAll();
                             <div class="product-info">
                                 <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px;"><?= htmlspecialchars($product['category_name'] ?? '') ?></span>
                                 <h3 class="product-title"><?= htmlspecialchars($product['name']); ?></h3>
-                                <div class="product-price">$<?= number_format($product['price'], 2); ?></div>
+                                <div class="product-price"><?= formatPrice($product['price']); ?></div>
                             </div>
                         </a>
                     </div>

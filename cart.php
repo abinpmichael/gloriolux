@@ -80,14 +80,15 @@ $total = 0;
                                     <img src="<?= BASE_URL ?><?php echo htmlspecialchars($item['image_url']); ?>" alt="Product" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                                     <span style="font-weight: 600;"><?php echo htmlspecialchars($item['name']); ?></span>
                                 </td>
-                                <td style="padding: 1rem 0;" data-label="Price">$<?php echo number_format($item['price'], 2); ?></td>
+                                 <td style="padding: 1rem 0;" data-label="Price"><?php echo formatPrice($item['price']); ?></td>
                                 <td style="padding: 1rem 0;" data-label="Quantity">
                                     <form action="<?= BASE_URL ?>cart_update.php" method="POST" style="display:flex; align-items:center; gap:5px;">
                                         <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">
                                         <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock'] > 0 ? $item['stock'] : 10; ?>" style="width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 0.3rem;" onchange="this.form.submit()">
                                     </form>
                                 </td>
-                                <td style="padding: 1rem 0; font-weight: bold;" data-label="Total">$<?php echo number_format($item_total, 2); ?></td>
+                                <td style="padding: 1rem 0; font-weight: bold;" data-label="Total"><?php echo formatPrice($item_total); ?></td>
+
                                 <td style="padding: 1rem 0; text-align: right;">
                                     <a href="<?= BASE_URL ?>cart_remove.php?id=<?php echo $item['cart_id']; ?>" style="color: red;"><i class="fas fa-trash"></i></a>
                                 </td>
