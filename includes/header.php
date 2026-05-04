@@ -1,3 +1,4 @@
+<?php
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
@@ -6,6 +7,7 @@ if (!isset($_SESSION['currency'])) {
 }
 require_once __DIR__.'/db.php';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
