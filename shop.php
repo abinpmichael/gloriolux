@@ -46,7 +46,7 @@ $categories = $cat_stmt->fetchAll();
                     </div>
                     <div class="product-info">
                         <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
-                        <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
+                        <div class="product-price"><?php echo formatPrice($product['price']); ?></div>
                     </div>
                 </a>
             </div>

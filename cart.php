@@ -120,13 +120,13 @@ $total = 0;
 
                     <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-light);">
                         <span>Subtotal</span>
-                        <span>$<?php echo number_format($total, 2); ?></span>
+                        <span><?php echo formatPrice($total); ?></span>
                     </div>
 
                     <?php if ($tax_enabled): ?>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-light);">
                             <span>Tax (<?= number_format($tax_rate, 2) ?>%)</span>
-                            <span>$<?php echo number_format($tax_amount, 2); ?></span>
+                            <span><?php echo formatPrice($tax_amount); ?></span>
                         </div>
                     <?php endif; ?>
 
@@ -137,7 +137,7 @@ $total = 0;
                     
                     <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; font-weight: bold; font-size: 1.2rem;">
                         <span>Total</span>
-                        <span>$<?php echo number_format($grand_total, 2); ?></span>
+                        <span><?php echo formatPrice($grand_total); ?></span>
                     </div>
 
                     <a href="<?= BASE_URL ?>checkout.php" class="btn btn-primary" style="width: 100%; text-align: center; display: block;">Proceed to Checkout</a>

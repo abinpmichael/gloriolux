@@ -30,11 +30,11 @@ $line_items = [];
 foreach ($cart_items as $item) {
     $line_items[] = [
         'price_data' => [
-            'currency' => 'usd',
+            'currency' => strtolower($_SESSION['currency'] ?? 'cad'),
             'product_data' => [
                 'name' => $item['name'],
             ],
-            'unit_amount' => $item['price'] * 100, // Stripe expects cents
+            'unit_amount' => (($_SESSION['currency'] ?? 'CAD') === 'USD' ? ($item['price'] * CAD_TO_USD) : $item['price']) * 100, // Stripe expects cents
         ],
         'quantity' => $item['quantity'],
     ];

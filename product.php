@@ -53,7 +53,7 @@ require_once 'includes/header.php';
                     <?php endif; ?>
                 </h1>
                 <p style="font-size: 1.5rem; color: var(--text-color); margin-bottom: 1.5rem; font-weight: 300;">
-                    $<?= number_format($product['price'], 2) ?>
+                    <?= formatPrice($product['price']) ?>
                 </p>
                 
                 <div style="font-size: 1.1rem; line-height: 1.7; color: var(--text-light); margin-bottom: 2.5rem;">

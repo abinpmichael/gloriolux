@@ -27,6 +27,17 @@ define('BASE_URL', $base_url);
 $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 define('BASE_URL_FULL', $protocol . '://' . $host . BASE_URL);
+define('CAD_TO_USD', 0.73); // Current approximate exchange rate
+
+function formatPrice($price) {
+    $currency = $_SESSION['currency'] ?? 'CAD';
+    if ($currency === 'USD') {
+        $price *= CAD_TO_USD;
+    }
+    return '$' . number_format($price, 2) . ' ' . $currency;
+}
+
+
 
 
 

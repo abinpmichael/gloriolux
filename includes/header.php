@@ -1,9 +1,12 @@
-<?php
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+if (!isset($_SESSION['currency'])) {
+    $_SESSION['currency'] = 'CAD';
+}
 require_once __DIR__.'/db.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,6 +55,10 @@ require_once __DIR__.'/db.php';
                 <li><a href="<?= BASE_URL ?>contact.php">Support</a></li>
             </ul>
             <div class="nav-icons">
+                <div class="currency-switcher" style="margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: var(--primary-color);">
+                    <a href="<?= BASE_URL ?>change_currency.php?currency=CAD" style="color: <?= $_SESSION['currency'] === 'CAD' ? 'var(--secondary-color)' : 'inherit' ?>; text-decoration: none;">CAD</a> | 
+                    <a href="<?= BASE_URL ?>change_currency.php?currency=USD" style="color: <?= $_SESSION['currency'] === 'USD' ? 'var(--secondary-color)' : 'inherit' ?>; text-decoration: none;">USD</a>
+                </div>
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <a href="<?= BASE_URL ?>profile.php" title="Profile"><i class="fas fa-user"></i></a>
                     <?php if($_SESSION['role'] === 'admin'): ?>
