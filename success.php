@@ -40,11 +40,18 @@ $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_amount, payment_status
 $stmt->execute([$user_id, $total_amount, $session_id]);
 $order_id = $pdo->lastInsertId();
 
-// 4. Create order items
+// 4. Create order items and update stock
 $item_stmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
+$stock_stmt = $pdo->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
+
 foreach ($cart_items as $item) {
+    // Insert item to order
     $item_stmt->execute([$order_id, $item['id'], $item['quantity'], $item['price']]);
+    
+    // Decrease product stock
+    $stock_stmt->execute([$item['quantity'], $item['id']]);
 }
+
 
 // 5. Clear the cart
 if ($user_id) {

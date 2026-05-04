@@ -9,11 +9,26 @@ $dbname = getenv('DB_NAME') ?: 'gloriolux_db';
 $user = getenv('DB_USER') ?: 'root';
 $pass = getenv('DB_PASS') ?: '';
 
-// Determine the correct base URL depending on environment
-$isLocalhost = ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1');
-define('BASE_URL', $isLocalhost ? '/Gloriolux/' : '/');
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-define('BASE_URL_FULL', $protocol . '://' . $_SERVER['HTTP_HOST'] . BASE_URL);
+// Determine the correct base URL dynamically
+$doc_root = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+$current_dir = str_replace('\\', '/', __DIR__);
+$app_root = str_replace('\\', '/', realpath($current_dir . '/..'));
+
+// Case-insensitive replacement for Windows
+$base_url = preg_replace('/' . preg_quote($doc_root, '/') . '/i', '', $app_root, 1);
+
+// Ensure leading and trailing slashes
+$base_url = '/' . ltrim($base_url, '/');
+$base_url = rtrim($base_url, '/') . '/';
+
+define('BASE_URL', $base_url);
+
+
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+define('BASE_URL_FULL', $protocol . '://' . $host . BASE_URL);
+
+
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);

@@ -9,8 +9,10 @@ require_once '../includes/db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add') {
     $image_url = 'assets/img/product1.png';
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $target_dir = '../uploads/';
+        if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
         $filename = time() . '_' . basename($_FILES['image']['name']);
-        if (move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/' . $filename)) {
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $filename)) {
             $image_url = 'uploads/' . $filename;
         }
     }
@@ -23,8 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit') {
     $image_url = $_POST['current_image'];
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $target_dir = '../uploads/';
+        if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
         $filename = time() . '_' . basename($_FILES['image']['name']);
-        if (move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/' . $filename)) {
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $filename)) {
             $image_url = 'uploads/' . $filename;
         }
     }

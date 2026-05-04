@@ -5,14 +5,26 @@ require_once '../includes/db.php';
 
 // Handle Add/Edit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $image_url = 'assets/img/logo.png';
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $target_dir = "../uploads/";
+        if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
+        $filename = time() . '_' . basename($_FILES['image']['name']);
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_dir . $filename)) {
+            $image_url = 'uploads/' . $filename;
+        }
+    }
+
     if (isset($_POST['action']) && $_POST['action'] === 'add') {
         $stmt = $pdo->prepare('INSERT INTO slides (title, subtitle, button_text, button_url, display_order, image_url) VALUES (?, ?, ?, ?, ?, ?)');
-        // Just using a placeholder image for newly added slides from UI
-        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], (int)$_POST['display_order'], 'assets/img/logo.png']);
+        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], (int)$_POST['display_order'], $image_url]);
         header('Location: slides.php?success=added'); exit;
     } elseif (isset($_POST['action']) && $_POST['action'] === 'edit') {
-        $stmt = $pdo->prepare('UPDATE slides SET title=?, subtitle=?, button_text=?, button_url=?, display_order=? WHERE id=?');
-        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], (int)$_POST['display_order'], (int)$_POST['id']]);
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            $image_url = $_POST['current_image'];
+        }
+        $stmt = $pdo->prepare('UPDATE slides SET title=?, subtitle=?, button_text=?, button_url=?, display_order=?, image_url=? WHERE id=?');
+        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], (int)$_POST['display_order'], $image_url, (int)$_POST['id']]);
         header('Location: slides.php?success=1'); exit;
     }
 }
@@ -82,7 +94,7 @@ $slides = $stmt->fetchAll();
                     <td style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></td>
                     <td><?= htmlspecialchars($s['button_text']) ?></td>
                     <td>
-                        <a href="#" onclick="openEdit(<?= $s['id'] ?>, '<?= addslashes($s['title']) ?>', `<?= addslashes($s['subtitle']) ?>`, '<?= addslashes($s['button_text']) ?>', '<?= addslashes($s['button_url']) ?>', <?= $s['display_order'] ?>)" style="color:var(--secondary-color); margin-right:10px;"><i class="fas fa-edit"></i></a>
+                        <a href="#" onclick="openEdit(<?= $s['id'] ?>, '<?= addslashes($s['title']) ?>', `<?= addslashes($s['subtitle']) ?>`, '<?= addslashes($s['button_text']) ?>', '<?= addslashes($s['button_url']) ?>', <?= $s['display_order'] ?>, '<?= $s['image_url'] ?>')" style="color:var(--secondary-color); margin-right:10px;"><i class="fas fa-edit"></i></a>
                         <a href="?delete=<?= $s['id'] ?>" onclick="return confirm('Are you sure you want to delete this slide?');" style="color:#ff6b6b;"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
@@ -92,14 +104,15 @@ $slides = $stmt->fetchAll();
     </div>
 </div>
 
-<!-- Edit Modal -->
+<!-- Modal -->
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
         <h3 id="modal-title" style="margin-bottom:1.5rem; font-family:var(--font-heading);">Edit Slide</h3>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" id="modal-action" value="edit">
             <input type="hidden" name="id" id="edit-id">
+            <input type="hidden" name="current_image" id="edit-current-image">
             <div class="form-group"><label>Hero Title</label><input type="text" name="title" id="edit-title" class="form-control" required></div>
             <div class="form-group"><label>Subtitle / Description</label><textarea name="subtitle" id="edit-sub" class="form-control" rows="3"></textarea></div>
             <div style="display:flex; gap:1rem;">
@@ -107,6 +120,7 @@ $slides = $stmt->fetchAll();
                 <div class="form-group" style="flex:1;"><label>Button URL</label><input type="text" name="button_url" id="edit-btnu" class="form-control"></div>
             </div>
             <div class="form-group"><label>Display Order</label><input type="number" name="display_order" id="edit-order" class="form-control"></div>
+            <div class="form-group"><label>Slide Image</label><input type="file" name="image" class="form-control" accept="image/*"></div>
             <button type="submit" class="btn btn-primary" style="width:100%;">Save Slide</button>
         </form>
     </div>
@@ -122,10 +136,11 @@ function openAdd() {
     document.getElementById('edit-btnt').value = '';
     document.getElementById('edit-btnu').value = '';
     document.getElementById('edit-order').value = '';
+    document.getElementById('edit-current-image').value = '';
     document.getElementById('editModal').style.display = 'block';
 }
 
-function openEdit(id, title, sub, btnt, btnu, order) {
+function openEdit(id, title, sub, btnt, btnu, order, img) {
     document.getElementById('modal-title').innerText = 'Edit Slide';
     document.getElementById('modal-action').value = 'edit';
     document.getElementById('edit-id').value = id;
@@ -134,6 +149,7 @@ function openEdit(id, title, sub, btnt, btnu, order) {
     document.getElementById('edit-btnt').value = btnt;
     document.getElementById('edit-btnu').value = btnu;
     document.getElementById('edit-order').value = order;
+    document.getElementById('edit-current-image').value = img;
     document.getElementById('editModal').style.display = 'block';
 }
 </script>
