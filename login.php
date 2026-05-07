@@ -4,6 +4,10 @@ require_once 'includes/header.php';
 require_once 'includes/db.php';
 
 $error = '';
+
+// Fetch Google Client ID
+$stmt_g = $pdo->query("SELECT setting_value FROM settings WHERE setting_key = 'google_client_id'");
+$google_client_id = $stmt_g->fetchColumn();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['password'])) {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
@@ -46,6 +50,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
             <input type="password" name="password" placeholder="Password" required class="form-control" style="padding:1rem;border:1px solid rgba(0,0,0,0.1);border-radius:8px;background:rgba(255,255,255,0.5);">
             <button type="submit" class="btn btn-primary" style="padding:1rem;background:var(--secondary-color);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;letter-spacing:1px;margin-top:0.5rem;">Sign In</button>
         </form>
+
+        <?php if ($google_client_id): ?>
+            <div style="margin-top: 1.5rem;">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <div style="flex: 1; height: 1px; background: #eee;"></div>
+                    <span style="padding: 0 10px; color: #999; font-size: 0.9rem;">OR</span>
+                    <div style="flex: 1; height: 1px; background: #eee;"></div>
+                </div>
+                
+                <script src="https://accounts.google.com/gsi/client" async defer></script>
+                <div id="g_id_onload"
+                     data-client_id="<?= htmlspecialchars($google_client_id) ?>"
+                     data-login_uri="<?= BASE_URL ?>google_login_handler.php"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-size="large"
+                     data-theme="outline"
+                     data-text="sign_in_with"
+                     data-shape="rectangular"
+                     data-logo_alignment="left"
+                     data-width="100%">
+                </div>
+            </div>
+        <?php endif; ?>
         <p style="margin-top:1.5rem;text-align:center;color:#666;">Don't have an account? <a href="register.php" style="color:var(--secondary-color);font-weight:600;">Create one</a></p>
     </section>
 </main>

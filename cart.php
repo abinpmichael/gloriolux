@@ -6,10 +6,10 @@ $session_id = session_id();
 
 // Fetch cart items
 if ($user_id) {
-    $stmt = $pdo->prepare("SELECT c.id as cart_id, c.quantity, p.* FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?");
+    $stmt = $pdo->prepare("SELECT c.id as cart_id, c.quantity, c.custom_text, c.custom_image, c.custom_price_addon, p.* FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?");
     $stmt->execute([$user_id]);
 } else {
-    $stmt = $pdo->prepare("SELECT c.id as cart_id, c.quantity, p.* FROM cart c JOIN products p ON c.product_id = p.id WHERE c.session_id = ? AND c.user_id IS NULL");
+    $stmt = $pdo->prepare("SELECT c.id as cart_id, c.quantity, c.custom_text, c.custom_image, c.custom_price_addon, p.* FROM cart c JOIN products p ON c.product_id = p.id WHERE c.session_id = ? AND c.user_id IS NULL");
     $stmt->execute([$session_id]);
 }
 $cart_items = $stmt->fetchAll();
@@ -72,15 +72,29 @@ $total = 0;
                         </thead>
                         <tbody>
                             <?php foreach ($cart_items as $item): 
-                                $item_total = $item['price'] * $item['quantity'];
+                                $base_price = $item['price'] + ($item['custom_price_addon'] ?? 0);
+                                $item_total = $base_price * $item['quantity'];
                                 $total += $item_total;
+                                $display_image = $item['custom_image'] ? $item['custom_image'] : $item['image_url'];
                             ?>
                             <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
                                 <td style="padding: 1rem 0; display: flex; align-items: center; gap: 1rem;">
-                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($item['image_url']); ?>" alt="Product" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                                    <span style="font-weight: 600;"><?php echo htmlspecialchars($item['name']); ?></span>
+                                    <div style="position: relative;">
+                                        <img src="<?= BASE_URL ?><?php echo htmlspecialchars($display_image); ?>" alt="Product" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                        <?php if($item['custom_image']): ?>
+                                            <span style="position: absolute; top: -5px; right: -5px; background: var(--primary-color); color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px;">Custom</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <span style="font-weight: 600; display: block;"><?php echo htmlspecialchars($item['name']); ?></span>
+                                    </div>
                                 </td>
-                                 <td style="padding: 1rem 0;" data-label="Price"><?php echo formatPrice($item['price']); ?></td>
+                                 <td style="padding: 1rem 0;" data-label="Price">
+                                    <?php echo formatPrice($base_price); ?>
+                                    <?php if($item['custom_price_addon'] > 0): ?>
+                                        <br><small style="color:var(--text-light);">(includes +$<?= number_format($item['custom_price_addon'], 2) ?> topper)</small>
+                                    <?php endif; ?>
+                                 </td>
                                 <td style="padding: 1rem 0;" data-label="Quantity">
                                     <form action="<?= BASE_URL ?>cart_update.php" method="POST" style="display:flex; align-items:center; gap:5px;">
                                         <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">

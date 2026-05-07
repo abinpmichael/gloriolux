@@ -19,7 +19,7 @@ $slides = $stmt_slides->fetchAll();
                     <h1 style="font-size: clamp(2.5rem, 8vw, 4.5rem); margin-bottom: 1.5rem; font-family: var(--font-heading); text-shadow: 0 4px 15px rgba(0,0,0,0.4); font-weight: 700;"><?= htmlspecialchars($slide['title']) ?></h1>
                     <p style="font-size: 1.25rem; margin-bottom: 2.5rem; max-width: 650px; margin-left: auto; margin-right: auto; text-shadow: 0 2px 5px rgba(0,0,0,0.4); font-weight: 300; line-height: 1.6;"><?= htmlspecialchars($slide['subtitle']) ?></p>
                     <?php if(!empty($slide['button_text']) && !empty($slide['button_url'])): ?>
-                        <a href="<?= htmlspecialchars($slide['button_url']) ?>" class="btn btn-primary" style="padding: 1.2rem 3rem; box-shadow: 0 10px 25px rgba(212,175,55,0.4);"><?= htmlspecialchars($slide['button_text']) ?></a>
+                        <a href="<?= htmlspecialchars($slide['button_url']) ?>" class="btn btn-primary" style="padding: 1.2rem 3rem; box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);"><?= htmlspecialchars($slide['button_text']) ?></a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -126,20 +126,5 @@ $slides = $stmt_slides->fetchAll();
         </div>
     </section>
 
-    <!-- Newsletter Capture -->
-    <section class="newsletter-section">
-        <div class="container">
-            <div class="newsletter-content fade-up">
-                <span class="section-subtitle">Stay Inspired</span>
-                <h2>Join the Inner Circle</h2>
-                <p>Subscribe for exclusive access to new collection launches, limited editions, and luxury scenting tips.</p>
-                <form action="<?= BASE_URL ?>subscribe.php" method="POST" class="newsletter-form" style="max-width: 500px; margin: 0 auto;">
-                    <input type="email" name="email" placeholder="Your email address" required style="border-radius: 40px 0 0 40px; padding: 1.2rem 2rem;">
-                    <button type="submit" style="border-radius: 0 40px 40px 0; padding: 0 2.5rem; font-weight: 700;">Join</button>
-                </form>
-                <p style="font-size: 0.8rem; margin-top: 1.5rem; opacity: 0.6;">By subscribing, you agree to our Privacy Policy.</p>
-            </div>
-        </div>
-    </section>
 
 <?php require_once 'includes/footer.php'; ?>

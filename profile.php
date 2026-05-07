@@ -25,6 +25,9 @@ if (!$user) {
 $ord_stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
 $ord_stmt->execute([$_SESSION['user_id']]);
 $orders = $ord_stmt->fetchAll();
+
+// Prepare statement for order items
+$items_stmt = $pdo->prepare("SELECT oi.quantity, p.name FROM order_items oi LEFT JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?");
 ?>
 <main class="main-content">
     <div class="container" style="padding-top: 40px; padding-bottom: 60px;">
@@ -71,6 +74,7 @@ $orders = $ord_stmt->fetchAll();
                                         <th style="padding: 0.5rem;">Date</th>
                                         <th style="padding: 0.5rem;">Total</th>
                                         <th style="padding: 0.5rem;">Status</th>
+                                        <th style="padding: 0.5rem;">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -83,6 +87,26 @@ $orders = $ord_stmt->fetchAll();
                                             <span style="background: <?= $order['order_status'] === 'Delivered' ? '#d4edda' : '#e2e3e5' ?>; color: <?= $order['order_status'] === 'Delivered' ? '#155724' : '#383d41' ?>; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem;">
                                                 <?= htmlspecialchars($order['order_status']) ?>
                                             </span>
+                                        </td>
+                                        <td style="padding: 0.5rem;">
+                                            <button type="button" class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="document.getElementById('order-details-<?= $order['id'] ?>').style.display = document.getElementById('order-details-<?= $order['id'] ?>').style.display === 'none' ? 'table-row' : 'none';">Items</button>
+                                        </td>
+                                    </tr>
+                                    <tr id="order-details-<?= $order['id'] ?>" style="display: none; background: #fff;">
+                                        <td colspan="5" style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                            <strong>Items in this order:</strong>
+                                            <ul style="margin: 0.5rem 0 0 1.5rem; color: #555;">
+                                                <?php 
+                                                $items_stmt->execute([$order['id']]);
+                                                $items = $items_stmt->fetchAll();
+                                                foreach($items as $it): 
+                                                ?>
+                                                    <li><?= $it['quantity'] ?>x <?= htmlspecialchars($it['name'] ?: 'Unknown Product') ?></li>
+                                                <?php endforeach; ?>
+                                                <?php if(count($items) === 0): ?>
+                                                    <li>No items found.</li>
+                                                <?php endif; ?>
+                                            </ul>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

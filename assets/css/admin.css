@@ -43,6 +43,7 @@ body {
         position: sticky;
         top: 0;
         height: 100vh;
+        align-self: flex-start;
         transform: translateX(0);   /* always open */
     }
 }

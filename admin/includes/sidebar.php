@@ -6,8 +6,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Logo + mobile close button -->
     <div class="admin-sidebar-logo">
         <a href="<?= BASE_URL ?>admin/index.php" class="brand-logo">
-            <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux">
-            <span class="logo-text">Glorio<span class="logo-highlight">lux</span></span>
+            <img src="<?= BASE_URL ?>assets/img/logo.png" alt="GLORIOLUX">
+            <span class="logo-text"><span class="logo-initial">G</span>LORIOLUX</span>
         </a>
         <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
             <i class="fas fa-times"></i>
@@ -20,6 +20,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <a href="index.php"      class="<?= $current_page === 'index.php'      ? 'active' : '' ?>"><i class="fas fa-home"></i> Dashboard</a>
         <a href="orders.php"     class="<?= $current_page === 'orders.php'     ? 'active' : '' ?>"><i class="fas fa-shopping-cart"></i> Orders</a>
         <a href="products.php"   class="<?= $current_page === 'products.php'   ? 'active' : '' ?>"><i class="fas fa-box"></i> Products</a>
+        <a href="categories.php" class="<?= $current_page === 'categories.php' ? 'active' : '' ?>"><i class="fas fa-tags"></i> Categories</a>
+        <a href="toppers.php"    class="<?= $current_page === 'toppers.php'    ? 'active' : '' ?>"><i class="fas fa-shapes"></i> Candle Toppers</a>
 
         <span class="nav-section-label">Content</span>
         <a href="slides.php"     class="<?= $current_page === 'slides.php'     ? 'active' : '' ?>"><i class="fas fa-images"></i> Home Slider</a>

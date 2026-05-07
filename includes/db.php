@@ -4,10 +4,17 @@ ini_set('display_errors', 0); // Hide errors from users (prevents leaking paths/
 ini_set('log_errors', 1);     // Enable error logging
 ini_set('error_log', __DIR__ . '/../php_errors.log'); // Write errors to this specific file
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$dbname = getenv('DB_NAME') ?: 'gloriolux_db';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
+if (strpos($_SERVER['HTTP_HOST'] ?? 'localhost', 'localhost') !== false || strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') !== false) {
+    $db_host = '127.0.0.1';
+    $dbname = 'gloriolux_db';
+    $user = 'root';
+    $pass = '';
+} else {
+    $db_host = 'localhost';
+    $dbname = 'u495399251_gloriolux';
+    $user = 'u495399251_gloriolux';
+    $pass = 'Gloriolux123##';
+}
 
 // Determine the correct base URL dynamically
 $doc_root = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
@@ -42,7 +49,7 @@ function formatPrice($price) {
 
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $pdo = new PDO("mysql:host=$db_host;dbname=$dbname;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch (PDOException $e) {

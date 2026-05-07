@@ -22,6 +22,16 @@ $rev_stmt = $pdo->prepare("SELECT r.*, u.name as reviewer_name FROM reviews r JO
 $rev_stmt->execute([$id]);
 $reviews = $rev_stmt->fetchAll();
 
+// Fetch gallery images
+$gal_stmt = $pdo->prepare("SELECT * FROM product_images WHERE product_id = ?");
+$gal_stmt->execute([$id]);
+$gallery_images = $gal_stmt->fetchAll();
+
+// Fetch toppers
+$toppers_stmt = $pdo->prepare("SELECT t.*, pt.custom_image_url FROM toppers t JOIN product_toppers pt ON t.id = pt.topper_id WHERE pt.product_id = ? ORDER BY t.name ASC");
+$toppers_stmt->execute([$id]);
+$toppers = $toppers_stmt->fetchAll();
+
 // Dynamic SEO
 $page_meta_title = htmlspecialchars($product['name']) . " | Gloriolux";
 $page_meta_desc = strip_tags($product['description']);
@@ -33,11 +43,38 @@ require_once 'includes/header.php';
         <div style="display: flex; flex-wrap: wrap; gap: 4rem; align-items: flex-start;">
             
             <!-- Product Image Gallery (Left Side) -->
-            <div style="flex: 1; min-width: 300px; background: #f8f9fa; border-radius: 16px; padding: 2rem; display: flex; justify-content: center; align-items: center;">
-                <?php if($product['image_url']): ?>
-                    <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; max-width: 500px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                <?php else: ?>
-                    <div style="width: 100%; height: 400px; background: #ddd; border-radius: 8px;"></div>
+            <div style="flex: 1; min-width: 300px;">
+                <div style="background: #f8f9fa; border-radius: 16px; padding: 2rem; display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
+                    <?php if($product['image_url']): ?>
+                        <img id="main-product-image" src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; max-width: 500px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: opacity 0.3s;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 400px; background: #ddd; border-radius: 8px;"></div>
+                    <?php endif; ?>
+                </div>
+
+                <?php if(count($gallery_images) > 0 || $product['image_url']): ?>
+                <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                    <?php if($product['image_url']): ?>
+                        <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" class="gallery-thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid var(--secondary-color);">
+                    <?php endif; ?>
+                    <?php foreach($gallery_images as $g_img): ?>
+                        <img src="<?= BASE_URL ?><?= htmlspecialchars($g_img['image_url']) ?>" class="gallery-thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.3s;">
+                    <?php endforeach; ?>
+                </div>
+                <script>
+                    document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+                        thumb.addEventListener('click', function() {
+                            document.querySelectorAll('.gallery-thumb').forEach(t => t.style.borderColor = 'transparent');
+                            this.style.borderColor = 'var(--secondary-color)';
+                            let mainImg = document.getElementById('main-product-image');
+                            mainImg.style.opacity = '0.5';
+                            setTimeout(() => {
+                                mainImg.src = this.src;
+                                mainImg.style.opacity = '1';
+                            }, 150);
+                        });
+                    });
+                </script>
                 <?php endif; ?>
             </div>
 
@@ -60,21 +97,63 @@ require_once 'includes/header.php';
                     <?= nl2br(htmlspecialchars($product['description'])) ?>
                 </div>
 
-                <form action="<?= BASE_URL ?>cart_add.php" method="POST" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
+                <form action="<?= BASE_URL ?>cart_add.php" method="POST" enctype="multipart/form-data" style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     
-                    <div style="display: flex; border: 1px solid #ddd; border-radius: 30px; overflow: hidden; background: #fff; flex-shrink: 0;">
-                        <button type="button" onclick="document.getElementById('qty').stepDown()" style="background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; color: var(--text-color);"><i class="fas fa-minus"></i></button>
-                        <input type="number" name="quantity" id="qty" value="1" min="1" max="<?= $product['stock'] > 0 ? $product['stock'] : 10 ?>" style="width: 50px; text-align: center; border: none; font-size: 1rem; -moz-appearance: textfield; pointer-events: none;">
-                        <button type="button" onclick="document.getElementById('qty').stepUp()" style="background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; color: var(--text-color);"><i class="fas fa-plus"></i></button>
+                    <?php if (count($toppers) > 0): ?>
+                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px dashed #ddd;">
+                        <h4 style="margin-bottom: 1rem; font-family: var(--font-heading);">Customize Product (Optional)</h4>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">Select Candle Topper Shape</label>
+                            <select name="topper_id" id="custom_shape_select" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px; background: #fff;">
+                                <option value="" data-img="">None (Standard Flat Top)</option>
+                                <?php foreach($toppers as $topper): 
+                                    $preview_img = !empty($topper['custom_image_url']) ? $topper['custom_image_url'] : $topper['image_url'];
+                                ?>
+                                    <option value="<?= $topper['id'] ?>" data-img="<?= BASE_URL . htmlspecialchars($preview_img) ?>">
+                                        <?= htmlspecialchars($topper['name']) ?> 
+                                        <?= $topper['price_addon'] > 0 ? '(+$' . number_format($topper['price_addon'], 2) . ')' : '' ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
-                    
-                    <?php if ($product['stock'] > 0): ?>
-                        <button type="submit" class="btn btn-primary" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">Add to Cart</button>
-                    <?php else: ?>
-                        <button type="button" class="btn btn-outline" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: 30px; font-size: 1.1rem; cursor: not-allowed;" disabled>Out of Stock</button>
                     <?php endif; ?>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                        <div style="display: flex; border: 1px solid #ddd; border-radius: 30px; overflow: hidden; background: #fff; flex-shrink: 0;">
+                            <button type="button" onclick="document.getElementById('qty').stepDown()" style="background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; color: var(--text-color);"><i class="fas fa-minus"></i></button>
+                            <input type="number" name="quantity" id="qty" value="1" min="1" max="<?= $product['stock'] > 0 ? $product['stock'] : 10 ?>" style="width: 50px; text-align: center; border: none; font-size: 1rem; -moz-appearance: textfield; pointer-events: none;">
+                            <button type="button" onclick="document.getElementById('qty').stepUp()" style="background: none; border: none; padding: 0.8rem 1.2rem; cursor: pointer; color: var(--text-color);"><i class="fas fa-plus"></i></button>
+                        </div>
+                        
+                        <?php if ($product['stock'] > 0): ?>
+                            <button type="submit" class="btn btn-primary" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">Add to Cart</button>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-outline" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: 30px; font-size: 1.1rem; cursor: not-allowed;" disabled>Out of Stock</button>
+                        <?php endif; ?>
+                    </div>
                 </form>
+
+                <script>
+                    const originalImageSrc = document.getElementById('main-product-image').src;
+                    document.getElementById('custom_shape_select').addEventListener('change', function(e) {
+                        const selectedOption = e.target.options[e.target.selectedIndex];
+                        const selectedImage = selectedOption.getAttribute('data-img');
+                        const mainImg = document.getElementById('main-product-image');
+                        
+                        mainImg.style.opacity = '0.5';
+                        setTimeout(() => {
+                            if (selectedImage) {
+                                mainImg.src = selectedImage;
+                            } else {
+                                mainImg.src = originalImageSrc;
+                            }
+                            mainImg.style.opacity = '1';
+                        }, 150);
+                    });
+                </script>
 
 
                 <!-- Product Features / Guarantees -->

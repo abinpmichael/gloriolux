@@ -2,8 +2,8 @@
         <div class="container footer-content">
             <div class="footer-section brand-section">
                 <a href="<?= BASE_URL ?>index.php" class="brand-logo" style="margin-bottom: 1.5rem;">
-                    <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux">
-                    <span class="logo-text">Glorio<span class="logo-highlight">lux</span></span>
+                    <img src="<?= BASE_URL ?>assets/img/logo.png" alt="GLORIOLUX">
+                    <span class="logo-text"><span class="logo-initial">G</span>LORIOLUX</span>
                 </a>
                 <p style="line-height: 1.8; opacity: 0.8; margin-top: 1rem;">Elevating everyday moments with artisanal, hand-poured luxury soy candles and premium gifting essentials.</p>
                 <div class="social-links" style="margin-top: 2rem;">
@@ -57,5 +57,11 @@
     </footer>
 
     <script src="<?= BASE_URL ?>assets/js/main.js?v=<?php echo time(); ?>"></script>
+    <?php 
+    // Fetch custom footer scripts
+    $stmt_f = $pdo->query("SELECT setting_value FROM settings WHERE setting_key = 'custom_footer_scripts'");
+    $f_scripts = $stmt_f->fetchColumn();
+    if(!empty($f_scripts)) echo $f_scripts;
+    ?>
 </body>
 </html>

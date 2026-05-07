@@ -6,6 +6,13 @@ if (!isset($_SESSION['currency'])) {
     $_SESSION['currency'] = 'CAD';
 }
 require_once __DIR__.'/db.php';
+
+// Fetch SEO & Tracking Scripts
+$stmt_seo = $pdo->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('gtm_header_code', 'gtm_body_code', 'ga_tracking_id', 'custom_footer_scripts')");
+$seo_scripts = $stmt_seo->fetchAll(PDO::FETCH_KEY_PAIR);
+$gtm_h = $seo_scripts['gtm_header_code'] ?? '';
+$gtm_b = $seo_scripts['gtm_body_code'] ?? '';
+$ga_id = $seo_scripts['ga_tracking_id'] ?? '';
 ?>
 
 
@@ -14,6 +21,18 @@ require_once __DIR__.'/db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php if(!empty($gtm_h)) echo $gtm_h; ?>
+    <?php if(!empty($ga_id)): ?>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $ga_id ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<?= $ga_id ?>');
+    </script>
+    <?php endif; ?>
 
     <?php
     if (!isset($page_meta_title)) {
@@ -42,12 +61,13 @@ require_once __DIR__.'/db.php';
     <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css?v=<?php echo time(); ?>">
 </head>
-<body>
+<body <?php if(!empty($gtm_b)) echo 'class="gtm-active"'; ?>>
+    <?php if(!empty($gtm_b)) echo $gtm_b; ?>
     <nav class="navbar">
         <div class="container nav-container">
             <a href="<?= BASE_URL ?>index.php" class="brand-logo">
-                <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux">
-                <span class="logo-text">Glorio<span class="logo-highlight">lux</span></span>
+                <img src="<?= BASE_URL ?>assets/img/logo.png" alt="GLORIOLUX">
+                <span class="logo-text"><span class="logo-initial">G</span>LORIOLUX</span>
             </a>
             <ul class="nav-links">
                 <li><a href="<?= BASE_URL ?>index.php">Home</a></li>

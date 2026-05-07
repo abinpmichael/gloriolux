@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: ' . BASE_URL . 'login.php'); exit; }
 require_once '../includes/db.php';
+if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') { header('Location: ' . BASE_URL . 'login.php'); exit; }
 
 // Handle Add/Edit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -25,37 +25,13 @@ if (isset($_GET['delete'])) {
 
 $stmt = $pdo->query('SELECT * FROM faqs ORDER BY display_order ASC');
 $faqs = $stmt->fetchAll();
+$admin_page_title = 'FAQ CMS';
+require_once 'includes/admin_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FAQ CMS | Admin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
-    <style>
-        .admin-layout {display:flex; min-height:100vh;}
-        .admin-sidebar {width:250px; background:var(--primary-color); color:#fff; padding:2rem 1rem; display:flex; flex-direction:column;}
-        .admin-main {flex:1; padding:2rem; background:#f4f6f8;}
-        .data-table {width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 4px 6px rgba(0,0,0,0.05);}
-        .data-table th, .data-table td {padding:1rem; border-bottom:1px solid #eee; text-align: left;}
-        .admin-sidebar a { display: block; padding: 1rem; color: #ccc; border-radius: 8px; margin-bottom: 0.5rem; text-decoration:none; }
-        .admin-sidebar a:hover, .admin-sidebar a.active { background-color: rgba(255,255,255,0.1); color: #fff; }
-        .admin-logo { font-family: var(--font-heading); font-size: 1.5rem; text-align: center; margin-bottom: 3rem; color: #fff; }
-        .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); }
-        .modal-content { background:#fff; margin:10% auto; padding:2rem; border-radius:12px; width:100%; max-width:600px; position:relative; }
-        .close-modal { position:absolute; right:20px; top:20px; cursor:pointer; font-size:1.5rem; }
-    </style>
-    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
-</head>
-<body>
-<div class="admin-layout">
-    <?php require_once 'includes/sidebar.php'; ?>
-    <div class="admin-main">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h2>Manage FAQs</h2>
-            <button onclick="document.getElementById('addModal').style.display='block'" class="btn btn-primary"><i class="fas fa-plus"></i> Add FAQ</button>
-        </div>
+<div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Manage FAQs</h2>
+    <button onclick="document.getElementById('addModal').style.display='block'" class="btn btn-primary"><i class="fas fa-plus"></i> Add FAQ</button>
+</div>
         
         <table class="data-table">
             <thead>
@@ -80,13 +56,11 @@ $faqs = $stmt->fetchAll();
                 <?php endforeach; ?>
             </tbody>
         </table>
-    </div>
-</div>
 
 <!-- Add Modal -->
-<div id="addModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="document.getElementById('addModal').style.display='none'">&times;</span>
+<div id="addModal" class="admin-modal">
+    <div class="admin-modal-content">
+        <span class="admin-modal-close" onclick="document.getElementById('addModal').style.display='none'">&times;</span>
         <h3 style="margin-bottom:1.5rem; font-family:var(--font-heading);">Add FAQ</h3>
         <form method="POST">
             <input type="hidden" name="action" value="add">
@@ -99,9 +73,9 @@ $faqs = $stmt->fetchAll();
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+<div id="editModal" class="admin-modal">
+    <div class="admin-modal-content">
+        <span class="admin-modal-close" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
         <h3 style="margin-bottom:1.5rem; font-family:var(--font-heading);">Edit FAQ</h3>
         <form method="POST">
             <input type="hidden" name="action" value="edit">
@@ -123,5 +97,4 @@ function openEdit(id, q, a, o) {
     document.getElementById('editModal').style.display = 'block';
 }
 </script>
-</body>
-</html>
+<?php require_once 'includes/admin_footer.php'; ?>
