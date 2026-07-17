@@ -160,7 +160,7 @@ require_once 'includes/header.php';
                 <ul style="list-style: none; padding: 0; color: var(--text-color); font-size: 0.95rem; line-height: 2;">
                     <li><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 10px;"></i> Hand-poured with 100% natural soy wax</li>
                     <li><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 10px;"></i> Eco-friendly and cruelty-free ingredients</li>
-                    <li><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 10px;"></i> Burn time: Approximately 60-80 hours</li>
+                   <!--  <li><i class="fas fa-check" style="color: var(--secondary-color); margin-right: 10px;"></i> Burn time: Approximately 60-80 hours</li> -->
                 </ul>
 
                 <!-- Share Product -->

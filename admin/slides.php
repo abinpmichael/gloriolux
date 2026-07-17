@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['action']) && $_POST['action'] === 'add') {
-        $stmt = $pdo->prepare('INSERT INTO slides (title, subtitle, button_text, button_url, display_order, image_url) VALUES (?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], (int)$_POST['display_order'], $image_url]);
+        $stmt = $pdo->prepare('INSERT INTO slides (title, subtitle, button_text, button_url, button2_text, button2_url, display_order, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], $_POST['button2_text'], $_POST['button2_url'], (int)$_POST['display_order'], $image_url]);
         header('Location: slides.php?success=added'); exit;
     } elseif (isset($_POST['action']) && $_POST['action'] === 'edit') {
         if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
             $image_url = $_POST['current_image'];
         }
-        $stmt = $pdo->prepare('UPDATE slides SET title=?, subtitle=?, button_text=?, button_url=?, display_order=?, image_url=? WHERE id=?');
-        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], (int)$_POST['display_order'], $image_url, (int)$_POST['id']]);
+        $stmt = $pdo->prepare('UPDATE slides SET title=?, subtitle=?, button_text=?, button_url=?, button2_text=?, button2_url=?, display_order=?, image_url=? WHERE id=?');
+        $stmt->execute([$_POST['title'], $_POST['subtitle'], $_POST['button_text'], $_POST['button_url'], $_POST['button2_text'], $_POST['button2_url'], (int)$_POST['display_order'], $image_url, (int)$_POST['id']]);
         header('Location: slides.php?success=1'); exit;
     }
 }
@@ -59,7 +59,8 @@ require_once 'includes/admin_header.php';
                     <th>Order</th>
                     <th>Image</th>
                     <th>Title</th>
-                    <th>Button Text</th>
+                    <th>Button 1 Text</th>
+                    <th>Button 2 Text</th>
                     <th style="width: 100px;">Actions</th>
                 </tr>
             </thead>
@@ -70,8 +71,9 @@ require_once 'includes/admin_header.php';
                     <td><img src="<?= BASE_URL ?><?= htmlspecialchars($s['image_url']) ?>" style="width: 100px; height: 50px; object-fit: cover; border-radius: 5px;"></td>
                     <td style="font-weight:bold;"><?= htmlspecialchars($s['title']) ?></td>
                     <td><?= htmlspecialchars($s['button_text']) ?></td>
+                    <td><?= htmlspecialchars($s['button2_text'] ?? '') ?></td>
                     <td>
-                        <a href="#" onclick="openEdit(<?= $s['id'] ?>, '<?= addslashes($s['title']) ?>', `<?= addslashes($s['subtitle']) ?>`, '<?= addslashes($s['button_text']) ?>', '<?= addslashes($s['button_url']) ?>', <?= $s['display_order'] ?>, '<?= $s['image_url'] ?>')" style="color:var(--secondary-color); margin-right:10px;"><i class="fas fa-edit"></i></a>
+                        <a href="#" onclick="openEdit(<?= $s['id'] ?>, '<?= addslashes($s['title']) ?>', `<?= addslashes($s['subtitle']) ?>`, '<?= addslashes($s['button_text'] ?? '') ?>', '<?= addslashes($s['button_url'] ?? '') ?>', '<?= addslashes($s['button2_text'] ?? '') ?>', '<?= addslashes($s['button2_url'] ?? '') ?>', <?= $s['display_order'] ?>, '<?= $s['image_url'] ?>')" style="color:var(--secondary-color); margin-right:10px;"><i class="fas fa-edit"></i></a>
                         <a href="?delete=<?= $s['id'] ?>" onclick="return confirm('Are you sure you want to delete this slide?');" style="color:#ff6b6b;"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
@@ -91,8 +93,12 @@ require_once 'includes/admin_header.php';
             <div class="form-group"><label>Hero Title</label><input type="text" name="title" id="edit-title" class="form-control" required></div>
             <div class="form-group"><label>Subtitle / Description</label><textarea name="subtitle" id="edit-sub" class="form-control" rows="3"></textarea></div>
             <div style="display:flex; gap:1rem;">
-                <div class="form-group" style="flex:1;"><label>Button Text</label><input type="text" name="button_text" id="edit-btnt" class="form-control"></div>
-                <div class="form-group" style="flex:1;"><label>Button URL</label><input type="text" name="button_url" id="edit-btnu" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>Button 1 Text</label><input type="text" name="button_text" id="edit-btnt" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>Button 1 URL</label><input type="text" name="button_url" id="edit-btnu" class="form-control"></div>
+            </div>
+            <div style="display:flex; gap:1rem;">
+                <div class="form-group" style="flex:1;"><label>Button 2 Text</label><input type="text" name="button2_text" id="edit-btn2t" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>Button 2 URL</label><input type="text" name="button2_url" id="edit-btn2u" class="form-control"></div>
             </div>
             <div class="form-group"><label>Display Order</label><input type="number" name="display_order" id="edit-order" class="form-control"></div>
             <div class="form-group"><label>Slide Image</label><input type="file" name="image" class="form-control" accept="image/*"></div>
@@ -110,12 +116,14 @@ function openAdd() {
     document.getElementById('edit-sub').value = '';
     document.getElementById('edit-btnt').value = '';
     document.getElementById('edit-btnu').value = '';
+    document.getElementById('edit-btn2t').value = '';
+    document.getElementById('edit-btn2u').value = '';
     document.getElementById('edit-order').value = '';
     document.getElementById('edit-current-image').value = '';
     document.getElementById('editModal').style.display = 'block';
 }
 
-function openEdit(id, title, sub, btnt, btnu, order, img) {
+function openEdit(id, title, sub, btnt, btnu, btn2t, btn2u, order, img) {
     document.getElementById('modal-title').innerText = 'Edit Slide';
     document.getElementById('modal-action').value = 'edit';
     document.getElementById('edit-id').value = id;
@@ -123,6 +131,8 @@ function openEdit(id, title, sub, btnt, btnu, order, img) {
     document.getElementById('edit-sub').value = sub;
     document.getElementById('edit-btnt').value = btnt;
     document.getElementById('edit-btnu').value = btnu;
+    document.getElementById('edit-btn2t').value = btn2t;
+    document.getElementById('edit-btn2u').value = btn2u;
     document.getElementById('edit-order').value = order;
     document.getElementById('edit-current-image').value = img;
     document.getElementById('editModal').style.display = 'block';

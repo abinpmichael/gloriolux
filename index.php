@@ -18,9 +18,14 @@ $slides = $stmt_slides->fetchAll();
                     <span class="section-subtitle fade-up" style="color: var(--secondary-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Handcrafted Excellence</span>
                     <<?= $index === 0 ? 'h1' : 'h2' ?> style="font-size: clamp(2.5rem, 8vw, 4.5rem); margin-bottom: 1.5rem; font-family: var(--font-heading); text-shadow: 0 4px 15px rgba(0,0,0,0.4); font-weight: 700;"><?= htmlspecialchars($slide['title']) ?></<?= $index === 0 ? 'h1' : 'h2' ?>>
                     <p style="font-size: 1.25rem; margin-bottom: 2.5rem; max-width: 650px; margin-left: auto; margin-right: auto; text-shadow: 0 2px 5px rgba(0,0,0,0.4); font-weight: 300; line-height: 1.6;"><?= htmlspecialchars($slide['subtitle']) ?></p>
-                    <?php if(!empty($slide['button_text']) && !empty($slide['button_url'])): ?>
-                        <a href="<?= htmlspecialchars($slide['button_url']) ?>" class="btn btn-primary" style="padding: 1.2rem 3rem; box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);"><?= htmlspecialchars($slide['button_text']) ?></a>
-                    <?php endif; ?>
+                    <div style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+                        <?php if(!empty($slide['button_text']) && !empty($slide['button_url'])): ?>
+                            <a href="<?= htmlspecialchars($slide['button_url']) ?>" class="btn btn-primary" style="padding: 1.2rem 3rem; box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);"><?= htmlspecialchars($slide['button_text']) ?></a>
+                        <?php endif; ?>
+                        <?php if(!empty($slide['button2_text']) && !empty($slide['button2_url'])): ?>
+                            <a href="<?= htmlspecialchars($slide['button2_url']) ?>" class="btn btn-outline" style="padding: 1.2rem 3rem;"><?= htmlspecialchars($slide['button2_text']) ?></a>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         <?php endforeach; ?>

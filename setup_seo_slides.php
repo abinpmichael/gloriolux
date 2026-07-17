@@ -9,15 +9,17 @@ try {
         subtitle TEXT,
         button_text VARCHAR(100),
         button_url VARCHAR(255),
+        button2_text VARCHAR(100) NULL,
+        button2_url VARCHAR(255) NULL,
         display_order INT DEFAULT 0
     )");
     
     // Seed slides if empty
     $stmt = $pdo->query("SELECT COUNT(*) FROM slides");
     if ($stmt->fetchColumn() == 0) {
-        $pdo->exec("INSERT INTO slides (image_url, title, subtitle, button_text, button_url, display_order) VALUES 
-        ('assets/img/hero.png', 'Illuminate Your Senses.', 'Hand-poured luxury soy candles crafted with exquisite fragrances to transform your space into a sanctuary of elegance.', 'Shop Collection', '/shop.php', 1),
-        ('assets/img/gifting.png', 'The Art of Gifting', 'Discover our curated selection of luxury gifting sets for any occasion.', 'Explore Gifts', '/shop.php?category=2', 2)");
+        $pdo->exec("INSERT INTO slides (image_url, title, subtitle, button_text, button_url, button2_text, button2_url, display_order) VALUES 
+        ('assets/img/hero.png', 'Illuminate Your Senses.', 'Hand-poured luxury soy candles crafted with exquisite fragrances to transform your space into a sanctuary of elegance.', 'Shop Collection', '/shop.php', 'Our Story', '/about.php', 1),
+        ('assets/img/gifting.png', 'The Art of Gifting', 'Discover our curated selection of luxury gifting sets for any occasion.', 'Explore Gifts', '/shop.php?category=2', NULL, NULL, 2)");
     }
 
     // 2. Create SEO metadata table
