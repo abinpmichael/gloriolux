@@ -111,7 +111,7 @@ require_once 'includes/admin_header.php';
     <div style="background:#fff; width:400px; margin:10% auto; padding:2rem; border-radius:12px; position:relative;">
         <span onclick="this.parentElement.parentElement.style.display='none'" style="position:absolute; right:1.5rem; top:1rem; cursor:pointer; font-size:1.5rem;">&times;</span>
         <h3 style="margin-bottom:1.5rem;">Add New Category</h3>
-        <form action="categories.php" method="POST">
+        <form action="categories" method="POST">
             <input type="hidden" name="action" value="add">
             <div class="form-group">
                 <label>Category Name</label>
@@ -127,7 +127,7 @@ require_once 'includes/admin_header.php';
     <div style="background:#fff; width:400px; margin:10% auto; padding:2rem; border-radius:12px; position:relative;">
         <span onclick="this.parentElement.parentElement.style.display='none'" style="position:absolute; right:1.5rem; top:1rem; cursor:pointer; font-size:1.5rem;">&times;</span>
         <h3 style="margin-bottom:1.5rem;">Edit Category</h3>
-        <form action="categories.php" method="POST">
+        <form action="categories" method="POST">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" id="edit-id">
             <div class="form-group">

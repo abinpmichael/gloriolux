@@ -49,18 +49,28 @@ require_once 'includes/admin_header.php';
         <tbody>
             <?php foreach($seo_pages as $s): ?>
             <tr>
-                <td style="font-family: monospace; color: var(--secondary-color);">/<?= htmlspecialchars($s['page_path']) ?></td>
-                <td style="font-weight:bold;"><?= htmlspecialchars($s['meta_title']) ?></td>
-                <td style="font-size: 0.85rem; color: var(--text-light);"><?= substr(htmlspecialchars($s['meta_description']), 0, 60) ?>...</td>
-                <td>
+                <td data-label="Page / Route" style="font-family: monospace; color: var(--secondary-color);">/<?= htmlspecialchars($s['page_path']) ?></td>
+                <td data-label="Meta Title" style="font-weight:bold;"><?= htmlspecialchars($s['meta_title']) ?></td>
+                <td data-label="Meta Description" style="font-size: 0.85rem; color: var(--text-light);"><?= substr(htmlspecialchars($s['meta_description']), 0, 60) ?>...</td>
+                <td data-label="Schema">
                     <?php if(!empty($s['schema_code'])): ?>
                         <span class="status-badge" style="background:#e8f5e9; color:#2e7d32;"><i class="fas fa-code"></i> Active</span>
                     <?php else: ?>
                         <span class="status-badge" style="background:#f5f5f5; color:#9e9e9e;">None</span>
                     <?php endif; ?>
                 </td>
-                <td style="text-align:right;">
-                    <button onclick="openEdit(<?= $s['id'] ?>, '<?= $s['page_path'] ?>', '<?= addslashes($s['meta_title']) ?>', `<?= str_replace('`', '\`', $s['meta_description']) ?>`, `<?= str_replace('`', '\`', $s['meta_keywords']) ?>`, `<?= str_replace('`', '\`', $s['schema_code']) ?>`)" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                <td data-label="Actions" style="text-align:right;">
+                    <button 
+                        onclick="openEdit(this)" 
+                        class="btn btn-outline" 
+                        style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                        data-id="<?= $s['id'] ?>"
+                        data-path="<?= htmlspecialchars($s['page_path']) ?>"
+                        data-title="<?= htmlspecialchars($s['meta_title']) ?>"
+                        data-desc="<?= htmlspecialchars($s['meta_description']) ?>"
+                        data-keywords="<?= htmlspecialchars($s['meta_keywords']) ?>"
+                        data-schema="<?= htmlspecialchars($s['schema_code']) ?>"
+                    >
                         <i class="fas fa-edit"></i> Edit
                     </button>
                 </td>
@@ -110,13 +120,13 @@ require_once 'includes/admin_header.php';
 </div>
 
 <script>
-function openEdit(id, path, title, desc, keywords, schema) {
-    document.getElementById('edit-id').value = id;
-    document.getElementById('display-path').innerText = '/' + path;
-    document.getElementById('edit-title').value = title;
-    document.getElementById('edit-desc').value = desc;
-    document.getElementById('edit-keywords').value = keywords;
-    document.getElementById('edit-schema').value = schema;
+function openEdit(btn) {
+    document.getElementById('edit-id').value = btn.getAttribute('data-id');
+    document.getElementById('display-path').innerText = '/' + btn.getAttribute('data-path');
+    document.getElementById('edit-title').value = btn.getAttribute('data-title');
+    document.getElementById('edit-desc').value = btn.getAttribute('data-desc');
+    document.getElementById('edit-keywords').value = btn.getAttribute('data-keywords');
+    document.getElementById('edit-schema').value = btn.getAttribute('data-schema');
     document.getElementById('seoModal').style.display = 'block';
 }
 </script>

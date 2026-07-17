@@ -48,7 +48,7 @@ require_once 'includes/admin_header.php';
 <?php endif; ?>
 
 <div class="settings-card">
-    <form action="profile.php" method="POST">
+    <form action="profile" method="POST">
         <div class="form-group">
             <label style="display:block;margin-bottom:0.5rem;font-weight:bold;">Display Name</label>
             <input type="text" name="name" value="<?= htmlspecialchars($admin['name']) ?>" class="form-control" required>

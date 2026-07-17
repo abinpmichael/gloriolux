@@ -7,12 +7,15 @@ if (!isset($_SESSION['currency'])) {
 }
 require_once __DIR__.'/db.php';
 
-// Fetch SEO & Tracking Scripts
-$stmt_seo = $pdo->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('gtm_header_code', 'gtm_body_code', 'ga_tracking_id', 'custom_footer_scripts')");
-$seo_scripts = $stmt_seo->fetchAll(PDO::FETCH_KEY_PAIR);
-$gtm_h = $seo_scripts['gtm_header_code'] ?? '';
-$gtm_b = $seo_scripts['gtm_body_code'] ?? '';
-$ga_id = $seo_scripts['ga_tracking_id'] ?? '';
+// Fetch SEO, Contact & Tracking Scripts
+$stmt_seo = $pdo->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('gtm_header_code', 'gtm_body_code', 'ga_tracking_id', 'custom_footer_scripts', 'contact_email', 'contact_phone', 'contact_address')");
+$all_settings = $stmt_seo->fetchAll(PDO::FETCH_KEY_PAIR);
+$gtm_h = $all_settings['gtm_header_code'] ?? '';
+$gtm_b = $all_settings['gtm_body_code'] ?? '';
+$ga_id = $all_settings['ga_tracking_id'] ?? '';
+$contact_email = $all_settings['contact_email'] ?? 'info@gloriolux.ca';
+$contact_phone = $all_settings['contact_phone'] ?? '+1 368-599-2247';
+$contact_address = $all_settings['contact_address'] ?? 'Calgary, Alberta';
 ?>
 
 
@@ -21,6 +24,24 @@ $ga_id = $seo_scripts['ga_tracking_id'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+    // Refined Canonical Logic for Clean URLs
+    $current_file = basename($_SERVER['PHP_SELF']);
+    $canonical_path = "";
+    
+    if ($current_file === 'index.php') {
+        $canonical_path = "";
+    } elseif ($current_file === 'blog_post.php' && isset($_GET['slug'])) {
+        $canonical_path = "blog/" . $_GET['slug'];
+    } else {
+        $canonical_path = str_replace('.php', '', $current_file);
+    }
+    
+    $query_str = !empty($_SERVER['QUERY_STRING']) && $current_file !== 'blog_post.php' ? '?' . $_SERVER['QUERY_STRING'] : '';
+    $canonical_url = BASE_URL_FULL . $canonical_path . $query_str;
+    ?>
+    <link rel="canonical" href="<?= $canonical_url ?>">
+    <meta name="robots" content="index, follow">
 
     <?php if(!empty($gtm_h)) echo $gtm_h; ?>
     <?php if(!empty($ga_id)): ?>
@@ -52,29 +73,54 @@ $ga_id = $seo_scripts['ga_tracking_id'] ?? '';
     <meta name="keywords" content="<?php echo htmlspecialchars($page_meta_keywords ?? 'candles, luxury, soy wax'); ?>">
     <?php if(!empty($page_schema)): ?>
         <!-- Structured Data -->
-        <?= $page_schema ?>
+        <?php if(strpos($page_schema, '<script') === false): ?>
+<script type="application/ld+json">
+<?= $page_schema ?>
+</script>
+        <?php else: ?>
+            <?= $page_schema ?>
+        <?php endif; ?>
     <?php endif; ?>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= $canonical_url ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($page_meta_title ?? 'Gloriolux') ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($page_meta_desc ?? 'Premium hand-poured luxury soy candles.') ?>">
+    <meta property="og:image" content="<?= BASE_URL_FULL ?>assets/img/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?= $canonical_url ?>">
+    <meta property="twitter:title" content="<?= htmlspecialchars($page_meta_title ?? 'Gloriolux') ?>">
+    <meta property="twitter:description" content="<?= htmlspecialchars($page_meta_desc ?? 'Premium hand-poured luxury soy candles.') ?>">
+    <meta property="twitter:image" content="<?= BASE_URL_FULL ?>assets/img/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <!-- Performance Optimization: Preload Critical Assets -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" href="<?= BASE_URL ?>assets/img/hero.png" as="image">
+
     <link rel="icon" href="<?= BASE_URL ?>assets/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css?v=1.1">
 </head>
 <body <?php if(!empty($gtm_b)) echo 'class="gtm-active"'; ?>>
     <?php if(!empty($gtm_b)) echo $gtm_b; ?>
     <nav class="navbar">
         <div class="container nav-container">
             <a href="<?= BASE_URL ?>index.php" class="brand-logo">
-                <img src="<?= BASE_URL ?>assets/img/logo.png" alt="GLORIOLUX">
+                <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux - Luxury Soy Candles Calgary" width="40" height="40" style="width: 40px; height: 40px;">
                 <span class="logo-text"><span class="logo-initial">G</span>LORIOLUX</span>
             </a>
             <ul class="nav-links">
-                <li><a href="<?= BASE_URL ?>index.php">Home</a></li>
-                <li><a href="<?= BASE_URL ?>shop.php">Shop</a></li>
-                <li><a href="<?= BASE_URL ?>blog.php">Blog</a></li>
-                <li><a href="<?= BASE_URL ?>about.php">Our Story</a></li>
-                <li><a href="<?= BASE_URL ?>contact.php">Support</a></li>
+                <li><a href="<?= BASE_URL ?>">Home</a></li>
+                <li><a href="<?= BASE_URL ?>shop">Shop</a></li>
+                <li><a href="<?= BASE_URL ?>blog">Blog</a></li>
+                <li><a href="<?= BASE_URL ?>about">Our Story</a></li>
+                <li><a href="<?= BASE_URL ?>contact">Support</a></li>
             </ul>
             <div class="nav-icons">
                 <div class="currency-switcher" style="margin-right: 15px; font-size: 0.8rem; font-weight: bold; color: var(--primary-color);">

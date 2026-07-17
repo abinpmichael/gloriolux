@@ -242,7 +242,7 @@ require_once 'includes/admin_header.php';
         <span onclick="document.getElementById('add-modal').style.display='none'" class="admin-modal-close" style="position:absolute; right:1.5rem; top:1rem; font-size:2rem; cursor:pointer; color:#999;">&times;</span>
         <h3 style="margin-bottom:2rem; font-family:var(--font-heading); font-size:1.8rem; text-align:center;">New Candle Topper</h3>
         
-        <form action="toppers.php" method="POST" enctype="multipart/form-data">
+        <form action="toppers" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
             
             <div class="form-group" style="margin-bottom:1.5rem;">
@@ -273,7 +273,7 @@ require_once 'includes/admin_header.php';
         <span onclick="document.getElementById('edit-modal').style.display='none'" class="admin-modal-close" style="position:absolute; right:1.5rem; top:1rem; font-size:2rem; cursor:pointer; color:#999;">&times;</span>
         <h3 style="margin-bottom:2rem; font-family:var(--font-heading); font-size:1.8rem; text-align:center;">Edit Topper</h3>
         
-        <form action="toppers.php" method="POST" enctype="multipart/form-data">
+        <form action="toppers" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" id="edit-id">
             

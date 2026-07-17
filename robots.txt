@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /vendor/
+Disallow: /scratch/
+Disallow: /login.php
+Disallow: /register.php
+Disallow: /cart.php
+Disallow: /checkout.php
+Disallow: /profile.php
+
+Sitemap: https://gloriolux.com/sitemap.xml

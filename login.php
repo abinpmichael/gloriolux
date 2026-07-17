@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once 'includes/header.php';
 require_once 'includes/db.php';
 
 $error = '';
@@ -31,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
         $error = "Invalid email or password.";
     }
 }
+
+require_once 'includes/header.php';
 ?>
 <main class="main-content">
     <section class="login-section" style="max-width:400px;margin:2rem auto;padding:2.5rem;background:rgba(255,255,255,0.9);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.1);backdrop-filter:blur(10px);">
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
                 Registration successful! Please login.
             </div>
         <?php endif; ?>
-        <form action="login.php" method="POST" style="display:flex;flex-direction:column;gap:1.2rem;">
+        <form action="login" method="POST" style="display:flex;flex-direction:column;gap:1.2rem;">
             <input type="email" name="email" placeholder="Email Address" required class="form-control" style="padding:1rem;border:1px solid rgba(0,0,0,0.1);border-radius:8px;background:rgba(255,255,255,0.5);">
             <input type="password" name="password" placeholder="Password" required class="form-control" style="padding:1rem;border:1px solid rgba(0,0,0,0.1);border-radius:8px;background:rgba(255,255,255,0.5);">
             <button type="submit" class="btn btn-primary" style="padding:1rem;background:var(--secondary-color);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;letter-spacing:1px;margin-top:0.5rem;">Sign In</button>
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
                 <script src="https://accounts.google.com/gsi/client" async defer></script>
                 <div id="g_id_onload"
                      data-client_id="<?= htmlspecialchars($google_client_id) ?>"
-                     data-login_uri="<?= BASE_URL ?>google_login_handler.php"
+                     data-login_uri="<?= BASE_URL ?>google_login_handler"
                      data-auto_prompt="false">
                 </div>
                 <div class="g_id_signin"

@@ -96,7 +96,7 @@ $total = 0;
                                     <?php endif; ?>
                                  </td>
                                 <td style="padding: 1rem 0;" data-label="Quantity">
-                                    <form action="<?= BASE_URL ?>cart_update.php" method="POST" style="display:flex; align-items:center; gap:5px;">
+                                    <form action="<?= BASE_URL ?>cart_update" method="POST" style="display:flex; align-items:center; gap:5px;">
                                         <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">
                                         <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock'] > 0 ? $item['stock'] : 10; ?>" style="width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 0.3rem;" onchange="this.form.submit()">
                                     </form>

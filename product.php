@@ -7,13 +7,13 @@ $stmt->execute([$id]);
 $product = $stmt->fetch();
 
 if (!$product) {
-    header("Location: " . BASE_URL . "shop.php?error=not_found");
+    header("Location: " . BASE_URL . "shop?error=not_found");
     exit;
 }
 
 // Check if hidden
 if ($product['is_hidden'] == 1 && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
-    header("Location: " . BASE_URL . "shop.php?error=product_unavailable");
+    header("Location: " . BASE_URL . "shop?error=product_unavailable");
     exit;
 }
 
@@ -46,7 +46,7 @@ require_once 'includes/header.php';
             <div style="flex: 1; min-width: 300px;">
                 <div style="background: #f8f9fa; border-radius: 16px; padding: 2rem; display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
                     <?php if($product['image_url']): ?>
-                        <img id="main-product-image" src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; max-width: 500px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: opacity 0.3s;">
+                        <img id="main-product-image" src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="Gloriolux <?= htmlspecialchars($product['name']) ?> Luxury Soy Candle Hand-Poured in Calgary" style="width: 100%; max-width: 500px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: opacity 0.3s;">
                     <?php else: ?>
                         <div style="width: 100%; height: 400px; background: #ddd; border-radius: 8px;"></div>
                     <?php endif; ?>
@@ -55,10 +55,10 @@ require_once 'includes/header.php';
                 <?php if(count($gallery_images) > 0 || $product['image_url']): ?>
                 <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
                     <?php if($product['image_url']): ?>
-                        <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" class="gallery-thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid var(--secondary-color);">
+                        <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?> view 1" class="gallery-thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid var(--secondary-color);">
                     <?php endif; ?>
-                    <?php foreach($gallery_images as $g_img): ?>
-                        <img src="<?= BASE_URL ?><?= htmlspecialchars($g_img['image_url']) ?>" class="gallery-thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.3s;">
+                    <?php foreach($gallery_images as $index => $g_img): ?>
+                        <img src="<?= BASE_URL ?><?= htmlspecialchars($g_img['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?> view <?= $index + 2 ?>" class="gallery-thumb" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.3s;">
                     <?php endforeach; ?>
                 </div>
                 <script>
@@ -97,7 +97,7 @@ require_once 'includes/header.php';
                     <?= nl2br(htmlspecialchars($product['description'])) ?>
                 </div>
 
-                <form action="<?= BASE_URL ?>cart_add.php" method="POST" enctype="multipart/form-data" style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
+                <form action="<?= BASE_URL ?>cart_add" method="POST" enctype="multipart/form-data" style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #eee;">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     
                     <?php if (count($toppers) > 0): ?>
@@ -211,7 +211,7 @@ require_once 'includes/header.php';
                 <?php if(isset($_GET['review']) && $_GET['review'] == 'success'): ?>
                     <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; text-align: center;">Thank you for your review!</div>
                 <?php endif; ?>
-                <form action="<?= BASE_URL ?>submit_review.php" method="POST" style="background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <form action="<?= BASE_URL ?>submit_review" method="POST" style="background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                     <div style="margin-bottom: 1.5rem;">
                         <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Rating</label>
@@ -232,7 +232,7 @@ require_once 'includes/header.php';
             <?php else: ?>
                 <div style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px;">
                     <p style="margin-bottom: 1rem; color: #666;">You must be logged in to leave a review.</p>
-                    <a href="<?= BASE_URL ?>login.php" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Login to Review</a>
+                    <a href="<?= BASE_URL ?>login" class="btn btn-outline" style="color: var(--primary-color); border-color: var(--primary-color);">Login to Review</a>
                 </div>
             <?php endif; ?>
         </div>

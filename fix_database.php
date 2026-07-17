@@ -37,8 +37,8 @@ try {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )");
 
-    // 4. Create faq (for FAQ CMS)
-    $pdo->exec("CREATE TABLE IF NOT EXISTS faq (
+    // 4. Create faqs (for FAQ CMS)
+    $pdo->exec("CREATE TABLE IF NOT EXISTS faqs (
         id INT AUTO_INCREMENT PRIMARY KEY,
         question VARCHAR(255) NOT NULL,
         answer TEXT NOT NULL,
@@ -93,7 +93,7 @@ try {
     ");
 
     $pdo->exec("INSERT INTO slides (image_url, title, subtitle, button_text, button_url, display_order) VALUES 
-        ('assets/img/hero.png', 'Illuminate Your Senses.', 'Hand-poured luxury soy candles crafted with exquisite fragrances to transform your space into a sanctuary of elegance.', 'Shop Collection', '/shop.php', 1),
+        ('assets/img/hero.png', 'Illuminate Your Senses.', 'Hand-poured luxury soy candles crafted with exquisite fragrances, proudly handmade in Calgary and delivering to Airdrie, Alberta.', 'Shop Collection', '/shop.php', 1),
         ('assets/img/gifting.png', 'The Art of Gifting', 'Discover our curated selection of luxury gifting sets for any occasion.', 'Explore Gifts', '/shop.php?category=2', 2)
     ");
 

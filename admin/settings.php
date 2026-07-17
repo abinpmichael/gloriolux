@@ -92,7 +92,7 @@ require_once 'includes/admin_header.php';
     <div class="admin-alert admin-alert-success"><i class="fas fa-check-circle"></i> Settings updated successfully!</div>
 <?php endif; ?>
 
-<form action="settings.php" method="POST">
+<form action="settings" method="POST">
     <input type="hidden" name="action" value="update_keys">
     
     <!-- Email Notifications Section -->

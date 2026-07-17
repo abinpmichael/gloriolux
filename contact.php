@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
     }
 }
 ?>
-<div class="contact-hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('assets/img/hero-bg.jpg'); background-size: cover; background-position: center; padding: 100px 0; text-align: center; color: #fff; margin-bottom: 4rem;">
+<div class="contact-hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<?= BASE_URL ?>assets/img/hero.png'); background-size: cover; background-position: center; padding: 100px 0; text-align: center; color: #fff; margin-bottom: 4rem;">
     <h1 style="font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 1rem;">Get In Touch</h1>
     <p style="font-size: 1.2rem; max-width: 600px; margin: auto; opacity: 0.9;">We're here to help you find your perfect scent or answer any questions about our luxury candles.</p>
 </div>
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
                     </div>
                 <?php endif; ?>
                 
-                <form action="contact.php" method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <form action="contact" method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
                     <div class="form-group">
                         <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #444;">Name</label>
                         <input type="text" name="name" required class="form-control" style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 10px; background: #fafafa; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--secondary-color)'" onblur="this.style.borderColor='#ddd'" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>">

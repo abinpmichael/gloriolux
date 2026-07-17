@@ -64,32 +64,34 @@ require_once 'includes/admin_header.php';
     <table class="data-table">
         <thead>
             <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Published</th>
-                <th style="width: 120px;">Actions</th>
+                <th>Post Title</th>
+                <th style="width: 120px; text-align: right;">Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($blogs as $b): ?>
             <tr>
-                <td>
-                    <?php if($b['image_url']): ?>
-                        <img src="<?= BASE_URL ?><?= htmlspecialchars($b['image_url']) ?>" style="width: 80px; height: 50px; object-fit: cover; border-radius: 5px;">
-                    <?php else: ?>
-                        <div style="width:80px; height:50px; background:#eee; border-radius:5px;"></div>
-                    <?php endif; ?>
-                </td>
-                <td style="font-weight:bold;"><?= htmlspecialchars($b['title']) ?></td>
-                <td><?= date('M j, Y', strtotime($b['created_at'])) ?></td>
-                <td>
-                    <a href="#" onclick="openEdit(<?= $b['id'] ?>, '<?= addslashes($b['title']) ?>', '<?= addslashes($b['slug']) ?>', `<?= str_replace('`', '\`', $b['excerpt']) ?>`, `<?= str_replace('`', '\`', $b['content']) ?>`, '<?= $b['image_url'] ?>', '<?= addslashes((string)$b['meta_title']) ?>', `<?= str_replace('`', '\`', (string)$b['meta_description']) ?>`, `<?= str_replace('`', '\`', (string)$b['meta_keywords']) ?>`)" style="color:var(--secondary-color); margin-right:10px;"><i class="fas fa-edit"></i></a>
+                <td data-label="Title" style="font-weight:bold;"><?= htmlspecialchars($b['title']) ?></td>
+                <td data-label="Actions" style="text-align: right;">
+                    <a href="#" class="edit-blog-btn" 
+                        data-id="<?= $b['id'] ?>"
+                        data-title="<?= htmlspecialchars($b['title']) ?>"
+                        data-slug="<?= htmlspecialchars($b['slug']) ?>"
+                        data-excerpt="<?= htmlspecialchars($b['excerpt']) ?>"
+                        data-content="<?= htmlspecialchars($b['content']) ?>"
+                        data-image="<?= htmlspecialchars($b['image_url']) ?>"
+                        data-meta-title="<?= htmlspecialchars((string)$b['meta_title']) ?>"
+                        data-meta-desc="<?= htmlspecialchars((string)$b['meta_description']) ?>"
+                        data-meta-keywords="<?= htmlspecialchars((string)$b['meta_keywords']) ?>"
+                        style="color:var(--secondary-color); margin-right:10px;">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
                     <a href="?delete=<?= $b['id'] ?>" onclick="return confirm('Delete this post?');" style="color:#ff6b6b;"><i class="fas fa-trash"></i></a>
                 </td>
             </tr>
             <?php endforeach; ?>
             <?php if(count($blogs) == 0): ?>
-                <tr><td colspan="4" style="text-align: center;">No blog posts found.</td></tr>
+                <tr><td colspan="2" style="text-align: center;">No blog posts found.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -97,7 +99,7 @@ require_once 'includes/admin_header.php';
 
 <!-- Blog Modal (Add/Edit) -->
 <div id="blogModal" class="admin-modal">
-    <div class="admin-modal-content" style="max-width:800px;">
+    <div class="admin-modal-content" style="max-width:800px; width: 95%; margin: 2rem auto;">
         <span class="admin-modal-close" onclick="document.getElementById('blogModal').style.display='none'">&times;</span>
 
         <h3 id="modal-title" style="margin-bottom:1.5rem; font-family:var(--font-heading);">Add Blog Post</h3>
@@ -106,9 +108,9 @@ require_once 'includes/admin_header.php';
             <input type="hidden" name="id" id="edit-id">
             <input type="hidden" name="current_image" id="edit-current-image">
             
-            <div style="display:flex; gap:1rem;">
-                <div class="form-group" style="flex:1;"><label>Post Title</label><input type="text" name="title" id="edit-title" class="form-control" required></div>
-                <div class="form-group" style="flex:1;"><label>URL Slug (e.g. my-first-post)</label><input type="text" name="slug" id="edit-slug" class="form-control" required></div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 250px;"><label>Post Title</label><input type="text" name="title" id="edit-title" class="form-control" required></div>
+                <div class="form-group" style="flex: 1; min-width: 250px;"><label>URL Slug (e.g. my-first-post)</label><input type="text" name="slug" id="edit-slug" class="form-control" required></div>
             </div>
             <div class="form-group"><label>Excerpt (Short Description)</label><textarea name="excerpt" id="edit-excerpt" class="form-control" rows="2"></textarea></div>
             <div class="form-group"><label>Main Content (HTML allowed)</label><textarea name="content" id="edit-content" class="form-control" rows="10" required></textarea></div>
@@ -141,21 +143,24 @@ function openAdd() {
     document.getElementById('blogModal').style.display = 'block';
 }
 
-function openEdit(id, title, slug, excerpt, content, img, mt, md, mk) {
-    document.getElementById('modal-title').innerText = 'Edit Blog Post';
-    document.getElementById('modal-action').value = 'edit';
-    document.getElementById('edit-id').value = id;
-    document.getElementById('edit-title').value = title;
-    document.getElementById('edit-slug').value = slug;
-    document.getElementById('edit-excerpt').value = excerpt;
-    document.getElementById('edit-content').value = content;
-    document.getElementById('edit-current-image').value = img;
-    document.getElementById('edit-meta-title').value = mt;
-    document.getElementById('edit-meta-desc').value = md;
-    document.getElementById('edit-meta-keywords').value = mk;
-    document.getElementById('modal-btn').innerText = 'Update Post';
-    document.getElementById('blogModal').style.display = 'block';
-}
+document.querySelectorAll('.edit-blog-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('modal-title').innerText = 'Edit Blog Post';
+        document.getElementById('modal-action').value = 'edit';
+        document.getElementById('edit-id').value = this.dataset.id;
+        document.getElementById('edit-title').value = this.dataset.title;
+        document.getElementById('edit-slug').value = this.dataset.slug;
+        document.getElementById('edit-excerpt').value = this.dataset.excerpt;
+        document.getElementById('edit-content').value = this.dataset.content;
+        document.getElementById('edit-current-image').value = this.dataset.image;
+        document.getElementById('edit-meta-title').value = this.dataset.metaTitle;
+        document.getElementById('edit-meta-desc').value = this.dataset.metaDesc;
+        document.getElementById('edit-meta-keywords').value = this.dataset.metaKeywords;
+        document.getElementById('modal-btn').innerText = 'Update Post';
+        document.getElementById('blogModal').style.display = 'block';
+    });
+});
 </script>
 
 <?php require_once 'includes/admin_footer.php'; ?>

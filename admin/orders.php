@@ -75,24 +75,24 @@ require_once 'includes/admin_header.php';
         <tbody>
             <?php foreach($orders as $o): ?>
             <tr>
-                <td style="font-weight:bold;">#<?= str_pad($o['id'], 5, '0', STR_PAD_LEFT) ?></td>
-                <td>
+                <td data-label="Order #" style="font-weight:bold;">#<?= str_pad($o['id'], 5, '0', STR_PAD_LEFT) ?></td>
+                <td data-label="Customer">
                     <?= htmlspecialchars($o['customer_name'] ?? 'Guest') ?><br>
                     <small style="color:#666;"><?= htmlspecialchars($o['customer_email'] ?? '') ?></small>
                 </td>
-                <td><?= date('Y-m-d H:i', strtotime($o['created_at'])) ?></td>
-                <td>$<?= number_format($o['total_amount'], 2) ?></td>
-                <td>
+                <td data-label="Date"><?= date('Y-m-d H:i', strtotime($o['created_at'])) ?></td>
+                <td data-label="Amount">$<?= number_format($o['total_amount'], 2) ?></td>
+                <td data-label="Payment">
                     <span style="color: <?= $o['payment_status'] == 'completed' ? 'green' : 'orange' ?>;">
                         <?= ucfirst($o['payment_status']) ?>
                     </span>
                 </td>
-                <td>
+                <td data-label="Status">
                     <span class="status-badge status-<?= $o['order_status'] ?? 'Processing' ?>">
                         <?= $o['order_status'] ?? 'Processing' ?>
                     </span>
                 </td>
-                <td>
+                <td data-label="Update">
                     <form method="POST" class="order-update-form" style="display: flex; gap: 5px;">
                         <input type="hidden" name="order_id" value="<?= $o['id'] ?>">
                         <select name="status" style="padding: 0.3rem; border-radius: 4px; border: 1px solid #ddd; font-size: 0.85rem;">
@@ -104,7 +104,7 @@ require_once 'includes/admin_header.php';
                         <button type="submit" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">Save</button>
                     </form>
                 </td>
-                <td>
+                <td data-label="Details">
                     <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="showOrderDetails(<?= $o['id'] ?>)">View</button>
                     
                     <!-- Hidden data for Modal -->

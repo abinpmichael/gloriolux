@@ -2,10 +2,10 @@
         <div class="container footer-content">
             <div class="footer-section brand-section">
                 <a href="<?= BASE_URL ?>index.php" class="brand-logo" style="margin-bottom: 1.5rem;">
-                    <img src="<?= BASE_URL ?>assets/img/logo.png" alt="GLORIOLUX">
+                    <img src="<?= BASE_URL ?>assets/img/logo.png" alt="Gloriolux - Luxury Soy Candles Calgary">
                     <span class="logo-text"><span class="logo-initial">G</span>LORIOLUX</span>
                 </a>
-                <p style="line-height: 1.8; opacity: 0.8; margin-top: 1rem;">Elevating everyday moments with artisanal, hand-poured luxury soy candles and premium gifting essentials.</p>
+                <p style="line-height: 1.8; opacity: 0.8; margin-top: 1rem;">Elevating everyday moments with artisanal, hand-poured luxury soy candles and premium gifting essentials in Calgary, AB.</p>
                 <div class="social-links" style="margin-top: 2rem;">
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-pinterest"></i></a>
@@ -15,17 +15,26 @@
             <div class="footer-section links-section">
                 <h3 style="color: var(--secondary-color); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Shop Collection</h3>
                 <ul>
-                    <li><a href="<?= BASE_URL ?>shop.php?category=1">Luxury Candles</a></li>
-                    <li><a href="<?= BASE_URL ?>shop.php?category=2">Gifting Sets</a></li>
-                    <li><a href="<?= BASE_URL ?>blog.php">Our Stories</a></li>
+                    <li><a href="<?= BASE_URL ?>shop?category=1">Luxury Candles</a></li>
+                    <li><a href="<?= BASE_URL ?>shop?category=2">Gifting Sets</a></li>
+                    <li><a href="<?= BASE_URL ?>blog">Our Journal</a></li>
                 </ul>
             </div>
             <div class="footer-section links-section">
                 <h3 style="color: var(--secondary-color); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Support</h3>
                 <ul>
-                    <li><a href="<?= BASE_URL ?>contact.php">Contact Us</a></li>
-                    <li><a href="<?= BASE_URL ?>faq.php">Shipping Info</a></li>
-                    <li><a href="<?= BASE_URL ?>about.php">About Us</a></li>
+                    <li><a href="<?= BASE_URL ?>shipping">Shipping Info</a></li>
+                    <li><a href="<?= BASE_URL ?>faq">FAQ & Help</a></li>
+                    <li><a href="<?= BASE_URL ?>contact">Contact Us</a></li>
+                    <li><a href="<?= BASE_URL ?>about">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section links-section">
+                <h3 style="color: var(--secondary-color); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Contact</h3>
+                <ul style="font-size: 0.9rem; opacity: 0.8;">
+                    <li style="margin-bottom: 0.8rem;"><i class="fas fa-phone-alt" style="margin-right: 10px; color: var(--secondary-color);"></i> <?= htmlspecialchars($contact_phone) ?></li>
+                    <li style="margin-bottom: 0.8rem;"><i class="fas fa-envelope" style="margin-right: 10px; color: var(--secondary-color);"></i> <?= htmlspecialchars($contact_email) ?></li>
+                    <li style="margin-bottom: 0.8rem;"><i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--secondary-color);"></i> <?= htmlspecialchars($contact_address) ?></li>
                 </ul>
             </div>
             <div class="footer-section newsletter-section" style="padding: 0;">
@@ -45,14 +54,14 @@
                     unset($_SESSION['subscribe_status']);
                 endif; 
                 ?>
-                <form action="<?= BASE_URL ?>subscribe.php" method="POST" class="newsletter-form">
+                <form action="<?= BASE_URL ?>subscribe" method="POST" class="newsletter-form">
                     <input type="email" name="email" placeholder="Email address" required style="font-size: 0.9rem;">
                     <button type="submit"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
         <div class="footer-bottom">
-            <p style="font-size: 0.8rem; opacity: 0.5;">&copy; <?php echo date('Y'); ?> Gloriolux Artisans. Handcrafted with passion. All rights reserved.</p>
+            <p style="font-size: 0.8rem; opacity: 0.5;">&copy; <?php echo date('Y'); ?> Gloriolux Artisans. Serving Calgary, Airdrie, and surrounding Alberta regions. All rights reserved.</p>
         </div>
     </footer>
 

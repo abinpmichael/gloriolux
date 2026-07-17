@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once 'includes/header.php';
 require_once 'includes/db.php';
 
 $error = '';
@@ -25,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
         }
     }
 }
+
+require_once 'includes/header.php';
 ?>
 <main class="main-content">
     <section class="register-section" style="max-width:450px;margin:2rem auto;padding:2.5rem;background:rgba(255,255,255,0.9);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.1);backdrop-filter:blur(10px);">
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
                 <?= htmlspecialchars($error) ?>
             </div>
         <?php endif; ?>
-        <form action="register.php" method="POST" style="display:flex;flex-direction:column;gap:1.2rem;">
+        <form action="register" method="POST" style="display:flex;flex-direction:column;gap:1.2rem;">
             <input type="text" name="name" placeholder="Full Name" required class="form-control" style="padding:1rem;border:1px solid rgba(0,0,0,0.1);border-radius:8px;background:rgba(255,255,255,0.5);" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>">
             <input type="email" name="email" placeholder="Email Address" required class="form-control" style="padding:1rem;border:1px solid rgba(0,0,0,0.1);border-radius:8px;background:rgba(255,255,255,0.5);" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
             <input type="password" name="password" placeholder="Password" required class="form-control" style="padding:1rem;border:1px solid rgba(0,0,0,0.1);border-radius:8px;background:rgba(255,255,255,0.5);">

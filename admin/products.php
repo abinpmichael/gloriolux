@@ -222,14 +222,14 @@ require_once 'includes/admin_header.php';
         <tbody>
             <?php foreach($products as $product): ?>
             <tr style="<?= ($product['is_hidden'] ?? 0) ? 'opacity:0.6;' : '' ?>">
-                <td>
+                <td data-label="Image">
                     <img src="<?= BASE_URL ?><?= htmlspecialchars($product['image_url']) ?>" alt="" style="width:50px; height:50px; object-fit:cover; border-radius:6px; border:1px solid #eee;">
                 </td>
-                <td style="font-weight:bold;"><?= htmlspecialchars($product['name']) ?></td>
-                <td><?= htmlspecialchars($product['category_name'] ?? 'Uncategorized') ?></td>
-                <td>$<?= number_format($product['price'], 2) ?></td>
-                <td><?= $product['stock'] ?></td>
-                <td>
+                <td data-label="Name" style="font-weight:bold;"><?= htmlspecialchars($product['name']) ?></td>
+                <td data-label="Category"><?= htmlspecialchars($product['category_name'] ?? 'Uncategorized') ?></td>
+                <td data-label="Price">$<?= number_format($product['price'], 2) ?></td>
+                <td data-label="Stock"><?= $product['stock'] ?></td>
+                <td data-label="Status">
                     <?php 
                         $status = $product['status'] ?? 'Active';
                         $bg = '#d4edda'; $cl = '#155724';
@@ -238,7 +238,7 @@ require_once 'includes/admin_header.php';
                     ?>
                     <span class="status-badge" style="background:<?= $bg ?>; color:<?= $cl ?>;"><?= $status ?></span>
                 </td>
-                <td style="text-align:right;">
+                <td data-label="Actions" style="text-align:right;">
                     <div style="display:flex; justify-content:flex-end; gap:12px;">
                         <a href="products.php?toggle_visibility=<?= $product['id'] ?>" title="<?= ($product['is_hidden'] ?? 0) ? 'Show' : 'Hide' ?>" style="color: <?= ($product['is_hidden'] ?? 0) ? '#999' : '#27ae60' ?>; font-size:1rem;">
                             <i class="fas <?= ($product['is_hidden'] ?? 0) ? 'fa-eye-slash' : 'fa-eye' ?>"></i>
@@ -275,7 +275,7 @@ require_once 'includes/admin_header.php';
     <div class="admin-modal-content">
         <span onclick="document.getElementById('add-modal').style.display='none'" class="admin-modal-close">&times;</span>
         <h3 style="margin-bottom:1.5rem; font-family:var(--font-heading);">Add New Product</h3>
-        <form action="products.php" method="POST" enctype="multipart/form-data">
+        <form action="products" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
             <div class="form-group"><label>Product Name</label><input type="text" name="name" class="form-control" required></div>
             <div class="form-group"><label>Category</label>
@@ -331,7 +331,7 @@ require_once 'includes/admin_header.php';
     <div class="admin-modal-content">
         <span onclick="document.getElementById('edit-modal').style.display='none'" class="admin-modal-close">&times;</span>
         <h3 style="margin-bottom:1.5rem; font-family:var(--font-heading);">Edit Product</h3>
-        <form action="products.php" method="POST" enctype="multipart/form-data">
+        <form action="products" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" id="edit-id">
             <input type="hidden" name="current_image" id="edit-current-image">
