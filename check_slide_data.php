@@ -1,17 +1,24 @@
 <?php
 require_once 'includes/db.php';
+// Enable error display AFTER requiring db.php (which hides them)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 header('Content-Type: text/plain');
 
 try {
-    // 1. Show columns in slides table
-    echo "--- TABLE STRUCTURE ---\n";
+    echo "--- DATABASE CONNECTION INFO ---\n";
+    echo "Host: " . ($db_host ?? 'not set') . "\n";
+    echo "DB Name: " . ($dbname ?? 'not set') . "\n";
+    echo "User: " . ($user ?? 'not set') . "\n";
+    
+    echo "\n--- TABLE STRUCTURE ---\n";
     $columns = $pdo->query("SHOW COLUMNS FROM slides")->fetchAll(PDO::FETCH_ASSOC);
     foreach ($columns as $col) {
         echo "Field: {$col['Field']} | Type: {$col['Type']} | Null: {$col['Null']}\n";
     }
     
     echo "\n--- SLIDES DATA ---\n";
-    // 2. Show actual rows in slides table
     $stmt = $pdo->query("SELECT * FROM slides");
     $slides = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (empty($slides)) {
